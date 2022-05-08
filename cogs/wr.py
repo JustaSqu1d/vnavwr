@@ -8,10 +8,6 @@ from discord.utils import basic_autocomplete
 from replit import db
 from rounding import re_format
 from time import time
-from threading import Thread
-
-
-
 
 class Wrall(Cog):
     def __init__(self, bot):
@@ -70,10 +66,10 @@ class Wrall(Cog):
             embed = Embed(title="Vnav.io World Records",
                           color=ctx.guild.me.color)
             embed.set_footer(text="Created by just a squid#5483")
+
+            coros = [ships_f(embed),ffa(embed),tdm2(embed)]
             
-            await ships_f(embed)
-            await ffa(embed)
-            await tdm2(embed)
+            await gather(*coros)
 
             pages.append(Page(embeds=[embed]))
 
@@ -113,28 +109,7 @@ class Wrall(Cog):
         )
         await ctx.defer()
 
-        def lb_format(db, type_, place):
-            if type_ == "players":
-                try:
-                    player, evidence = db["user"].split("|")[0], db["link"]
-                    player2 = run(self.bot.fetch_user(player))
-                    return f"\n[{player2.name}]({evidence})\n" if place != "Mobile 1st" else f"\n**Mobile**\n\n[{player2.name}]({evidence})\n"
-                except AttributeError:
-                    return f"\n-----\n" if place != "Mobile 1st" else f"\n**Mobile**\n\n-----\n"
-            elif type_ == "scores":
-                try:
-                    score = "{:,}".format(int(db["user"].split("|")[1]))
-                    return f"\n{score}\n" if place != "Mobile 1st" else f"\n**Score**\n\n{score}\n"
-                except AttributeError:
-                    return f"\n-----\n" if place != "Mobile 1st" else f"\n**Mobile**\n\n-----\n"
-            elif type_ == "times":
-                if db['min'] + db['sec'] + db['hour'] == 0:
-                    return f"\n-----\n" if place != "Mobile 1st" else f"\n**Mobile**\n\n-----\n"
-                time_ = f"{db['min']}m {db['sec']}s" if db[
-                    'hour'] == 0 else f"{db['hour']}h {db['min']}m {db['sec']}s"
-                return f"\n{time_}\n" if place != "Mobile 1st" else f"\n**Time**\n\n{time_}\n"
-
-        async def lb_format2(db, type_, place):
+        async def lb_format(db, type_, place):
             if type_ == "players":
                 try:
                     player, evidence = db["user"].split("|")[0], db["link"]
@@ -159,9 +134,9 @@ class Wrall(Cog):
             embed.insert_field_at(index=0,
                                   name='Player',
                                   value="".join([
-                                      await lb_format2(
+                                      await (lb_format(
                                           db2[ship][gamemode][category][place],
-                                          "players", place) for place in places
+                                          "players", place)) for place in places
                                   ]),
                                   inline=True)
 
@@ -169,7 +144,7 @@ class Wrall(Cog):
             embed.insert_field_at(index=1,
                                   name='Score',
                                   value="".join([
-                                      lb_format(
+                                      await lb_format(
                                           db2[ship][gamemode][category][place],
                                           "scores", place) for place in places
                                   ]),
@@ -179,7 +154,7 @@ class Wrall(Cog):
             embed.insert_field_at(index=2,
                                   name='Time',
                                   value="".join([
-                                      lb_format(
+                                      await lb_format(
                                           db2[ship][gamemode][category][place],
                                           "times", place) for place in places
                                   ]),
@@ -189,16 +164,8 @@ class Wrall(Cog):
 
         embed = Embed(title=f"{ship} ({gamemode}) {category} Leaderboard",
                       color=ctx.guild.me.color)
-
-        await player(embed)
-        t1 = Thread(target=score, args=(embed, ))
-        t2 = Thread(target=time_, args=(embed, ))
-
-        t1.start()
-        t2.start()
-
-        t1.join()
-        t2.join()
+        coros = [score(embed), time_(embed), player(embed)]
+        await gather(*coros)
 
         embed.set_footer(text="Created by just a squid#5483")
 
