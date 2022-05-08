@@ -75,6 +75,8 @@ class Wrall(Cog):
             data = []
 
             for ship in ships:
+                if db2[ship]["FFA"]["High Score"]["1"]["user"] == 0:
+                    continue
                 entry = []
                 entry.append(ship)
                 entry.append(await lb_format(ship, db2, 'FFA'))
