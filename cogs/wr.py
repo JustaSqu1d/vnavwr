@@ -8,7 +8,7 @@ from discord.utils import basic_autocomplete
 from replit import db
 from rounding import re_format
 from time import time
-from tabulate import tabulate
+from prettytable import PrettyTable
 
 class Wrall(Cog):
     def __init__(self, bot):
@@ -68,11 +68,9 @@ class Wrall(Cog):
                           color=ctx.guild.me.color)
             embed.set_footer(text="Created by just a squid#5483")
 
-            coros = [ships_f(embed),ffa(embed),tdm2(embed)]
+            #coros = [ships_f(embed),ffa(embed),tdm2(embed)]
 
-            head = ["Ship", "FFA", "2 Teams"]
-
-            data = []
+            table = PrettyTable(["Ship", "FFA", "2 Teams"])
 
             for ship in ships:
                 
@@ -86,11 +84,11 @@ class Wrall(Cog):
                     entry.append(await lb_format(ship, db2, '2 Teams'))
                 else:
                     entry.append("-----")
-                data.append(entry)
+                table.add_row(entry)
             
             #await gather(*coros)
 
-            embed.description = tabulate(data, headers=head)
+            embed.description = table
 
             pages.append(Page(embeds=[embed]))
 

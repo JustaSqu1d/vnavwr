@@ -1,5 +1,5 @@
 language="python3"
-run = "pip install py-cord==2.0.0b7 && pip install tabulate && python main.py"
+run = "pip install py-cord==2.0.0b7 && pip install prettytable  && python main.py"
 
 [packager]
 ignoredPackages=["discord.py", "discord"]
