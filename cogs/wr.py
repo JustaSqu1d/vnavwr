@@ -70,7 +70,7 @@ class Wrall(Cog):
 
             #coros = [ships_f(embed),ffa(embed),tdm2(embed)]
 
-            header = ["Ship", "FFA", "Score", "2 Teams", "Score"]
+            header = ["Ship", "FFA", "2 Teams"]
 
             body = []
 
@@ -87,7 +87,6 @@ class Wrall(Cog):
                 else:
                     entry.append("-----")
                 body.append(entry)
-                print(len(entry))
             
             #await gather(*coros)
 
