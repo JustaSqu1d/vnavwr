@@ -66,6 +66,7 @@ class Wrall(Cog):
         for ships in shipsall:
             embed = Embed(title="Vnav.io World Records",
                           color=ctx.guild.me.color)
+            embed.set_footer(text="Created by just a squid#5483")
 
             #coros = [ships_f(embed),ffa(embed),tdm2(embed)]
 
@@ -95,7 +96,7 @@ class Wrall(Cog):
             style=PresetStyle.ascii_simple
             )
 
-            embed.set_footer(text=f"```\n{output}\n```")
+            embed.set_author(name=f"```\n{output}\n```")
 
             pages.append(Page(embeds=[embed]))
 
