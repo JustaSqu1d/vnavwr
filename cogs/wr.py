@@ -95,8 +95,8 @@ class Wrall(Cog):
             body=body,
             style=PresetStyle.ascii_simple
             )
-
-            embed.set_author(name=f"```\n{output}\n```")
+            
+            embed.description = f"```\n{output}\n```"
 
             pages.append(Page(embeds=[embed]))
 
