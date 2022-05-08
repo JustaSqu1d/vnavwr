@@ -35,9 +35,7 @@ class Wrall(Cog):
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
             if type_:
-                return f"\n{user.name}"
-            else:
-                return "[{score}](<{entry['link']}>)\n"
+                return f"\n{user.name} | [{score}](<{entry['link']}>)\n"
 
         async def ships_f(embed):
             embed.add_field(name='Ship',
