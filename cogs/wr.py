@@ -75,12 +75,13 @@ class Wrall(Cog):
             data = []
 
             for ship in ships:
-                if db2[ship]["FFA"]["High Score"]["1"]["user"] == 0:
-                    continue
+                
                 entry = []
                 entry.append(ship)
-                entry.append(await lb_format(ship, db2, 'FFA'))
-                entry.append(await lb_format(ship, db2, '2 Teams'))
+                if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0:
+                    entry.append(await lb_format(ship, db2, 'FFA'))
+                if db2[ship]["2 Teams"]["High Score"]["1"]["user"] != 0:
+                    entry.append(await lb_format(ship, db2, '2 Teams'))
                 data.append(entry)
             
             #await gather(*coros)
