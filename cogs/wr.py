@@ -9,9 +9,7 @@ from replit import db
 from rounding import re_format
 from time import time
 from threading import Thread
-
-
-
+from tabulate import tabulate
 
 class Wrall(Cog):
     def __init__(self, bot):
