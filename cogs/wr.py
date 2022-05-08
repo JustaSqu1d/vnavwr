@@ -80,8 +80,12 @@ class Wrall(Cog):
                 entry.append(ship)
                 if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0:
                     entry.append(await lb_format(ship, db2, 'FFA'))
+                else:
+                    entry.append("-----")
                 if db2[ship]["2 Teams"]["High Score"]["1"]["user"] != 0:
                     entry.append(await lb_format(ship, db2, '2 Teams'))
+                else:
+                    entry.append("-----")
                 data.append(entry)
             
             #await gather(*coros)
