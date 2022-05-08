@@ -37,7 +37,7 @@ class Wrall(Cog):
             return f"\n[{user.name} | {score}]({entry['link']})\n"
 
         async def ships_f(embed):
-            embed.add_field(name='Tank',
+            embed.add_field(name='Ship',
                             value="".join(
                                 [f"\n**{ship}**\n" for ship in ships]),
                             inline=True)
@@ -69,8 +69,21 @@ class Wrall(Cog):
             embed.set_footer(text="Created by just a squid#5483")
 
             coros = [ships_f(embed),ffa(embed),tdm2(embed)]
+
+            head = ["Ship", "FFA", "2 Teams"]
+
+            data = []
+
+            for ship in ships:
+                entry = []
+                entry.append(ship)
+                entry.append(await lb_format(ship, db2, 'FFA'))
+                entry.append(await lb_format(ship, db2, '2 Teams'))
+                data.append(entry)
             
-            await gather(*coros)
+            #await gather(*coros)
+
+            embed.description = tabulate(data, headers=head, tablefmt="grid")
 
             pages.append(Page(embeds=[embed]))
 
