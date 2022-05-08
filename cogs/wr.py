@@ -29,12 +29,15 @@ class Wrall(Cog):
         pages = []
         db2 = db
 
-        async def lb_format(ship, db2, mode):
+        async def lb_format(ship, db2, mode, type_):
             entry = db2[ship][mode]["High Score"]["1"]
             us = entry["user"].split("|")
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
-            return f"\n[{user.name} | {score}]({entry['link']})\n"
+            if type_:
+                return f"\n{user.name}"
+            else:
+                return "[{score}](<{entry['link']}>)\n"
 
         async def ships_f(embed):
             embed.add_field(name='Ship',
@@ -70,7 +73,7 @@ class Wrall(Cog):
 
             #coros = [ships_f(embed),ffa(embed),tdm2(embed)]
 
-            header = ["Ship", "FFA", "2 Teams"]
+            header = ["Ship", "FFA", "Score", "2 Teams", "Score"]
 
             body = []
 
@@ -90,9 +93,15 @@ class Wrall(Cog):
             
             #await gather(*coros)
 
-            embed.description = 0
+            output = t2a(
+            header=header,
+            body=body,
+            style=PresetStyle.thin_compact
+            )
 
-            pages.append(Page(content=t2a(header=header, body=body, style=PresetStyle.thin_compact)))
+            embed.description = f"```\n{output}\n```"
+
+            pages.append(Page(embeds=[embed]))
 
         paginator = Paginator(pages=pages, loop_pages=True, timeout=30.0, disable_on_timeout=True)
         await paginator.respond(ctx.interaction)
