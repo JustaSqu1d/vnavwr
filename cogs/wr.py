@@ -81,11 +81,11 @@ class Wrall(Cog):
                 if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0:
                     entry.append(await lb_format(ship, db2, 'FFA'))
                 else:
-                    entry.append("-----")
+                    entry.append("-")
                 if db2[ship]["2 Teams"]["High Score"]["1"]["user"] != 0:
                     entry.append(await lb_format(ship, db2, '2 Teams'))
                 else:
-                    entry.append("-----")
+                    entry.append("-")
                 body.append(entry)
             
             #await gather(*coros)
@@ -95,7 +95,7 @@ class Wrall(Cog):
             body=body,
             style=PresetStyle.ascii_simple
             )
-            
+
             embed.description = f"```\n{output}\n```"
 
             pages.append(Page(embeds=[embed]))
