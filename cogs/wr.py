@@ -70,7 +70,7 @@ class Wrall(Cog):
 
             #coros = [ships_f(embed),ffa(embed),tdm2(embed)]
 
-            header = ["Ship", "FFA", "2 Teams"]
+            header = ["Ship", "FFA", "2TDM"]
 
             body = []
 
@@ -93,7 +93,7 @@ class Wrall(Cog):
             output = t2a(
             header=header,
             body=body,
-            style=PresetStyle.thin_compact
+            style=PresetStyle.ascii_simple
             )
 
             embed.description = f"```\n{output}\n```"
