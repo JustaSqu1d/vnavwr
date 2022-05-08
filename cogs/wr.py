@@ -29,13 +29,12 @@ class Wrall(Cog):
         pages = []
         db2 = db
 
-        async def lb_format(ship, db2, mode, type_):
+        async def lb_format(ship, db2, mode):
             entry = db2[ship][mode]["High Score"]["1"]
             us = entry["user"].split("|")
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
-            if type_:
-                return f"\n{user.name} | [{score}](<{entry['link']}>)\n"
+            return f"\n{user.name} | [{score}](<{entry['link']}>)\n"
 
         async def ships_f(embed):
             embed.add_field(name='Ship',
