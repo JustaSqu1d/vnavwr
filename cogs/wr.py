@@ -35,9 +35,7 @@ class Wrall(Cog):
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
             if type_:
-                return f"{user.name}"
-            else:
-                return "{score}"
+                return f"{user.name}\n{score}"
 
         async def ships_f(embed):
             embed.add_field(name='Ship',
@@ -73,7 +71,7 @@ class Wrall(Cog):
 
             #coros = [ships_f(embed),ffa(embed),tdm2(embed)]
 
-            header = ["Ship", "FFA", "Score", "2 Teams", "Score"]
+            header = ["Ship", "FFA", "2 Teams"]
 
             body = []
 
@@ -82,16 +80,12 @@ class Wrall(Cog):
                 entry = []
                 entry.append(ship)
                 if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0:
-                    entry.append(await lb_format(ship, db2, 'FFA', True))
-                    entry.append(await lb_format(ship, db2, 'FFA', False))
+                    entry.append(await lb_format(ship, db2, 'FFA'))
                 else:
-                    entry.append("-----")
                     entry.append("-----")
                 if db2[ship]["2 Teams"]["High Score"]["1"]["user"] != 0:
-                    entry.append(await lb_format(ship, db2, '2 Teams', True))
-                    entry.append(await lb_format(ship, db2, '2 Teams', False))
+                    entry.append(await lb_format(ship, db2, '2 Teams'))
                 else:
-                    entry.append("-----")
                     entry.append("-----")
                 body.append(entry)
             
