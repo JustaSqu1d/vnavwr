@@ -88,7 +88,7 @@ class Wrall(Cog):
             
             #await gather(*coros)
 
-            embed.description = table
+            embed.description = str(table)
 
             pages.append(Page(embeds=[embed]))
 
