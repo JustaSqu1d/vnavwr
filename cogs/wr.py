@@ -34,7 +34,7 @@ class Wrall(Cog):
             us = entry["user"].split("|")
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
-            return f"{score}\n{user.name}"
+            return f"{score}\n'{user.name}'"
 
         async def ships_f(embed):
             embed.add_field(name='Ship',
@@ -70,7 +70,7 @@ class Wrall(Cog):
 
             #coros = [ships_f(embed),ffa(embed),tdm2(embed)]
 
-            header = ["Ship", "FFA", "2TDM"]
+            header = ["\"Ship\"", "\"FFA\"", "\"2TDM\""]
 
             body = []
 
@@ -96,7 +96,7 @@ class Wrall(Cog):
             style=PresetStyle.ascii_simple
             )
 
-            embed.description = f"```\n{output}\n```"
+            embed.description = f"```ml\n{output}\n```"
 
             pages.append(Page(embeds=[embed]))
 
