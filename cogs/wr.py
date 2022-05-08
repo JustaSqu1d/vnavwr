@@ -90,7 +90,7 @@ class Wrall(Cog):
             
             #await gather(*coros)
 
-            embed.description = tabulate(data, headers=head, tablefmt="grid")
+            embed.description = tabulate(data, headers=head)
 
             pages.append(Page(embeds=[embed]))
 
