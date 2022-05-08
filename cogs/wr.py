@@ -29,12 +29,15 @@ class Wrall(Cog):
         pages = []
         db2 = db
 
-        async def lb_format(ship, db2, mode):
+        async def lb_format(ship, db2, mode, type_):
             entry = db2[ship][mode]["High Score"]["1"]
             us = entry["user"].split("|")
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
-            return f"{user.name} | {score}"
+            if type_:
+                return f"{user.name}"
+            else:
+                return "{score}"
 
         async def ships_f(embed):
             embed.add_field(name='Ship',
@@ -70,7 +73,7 @@ class Wrall(Cog):
 
             #coros = [ships_f(embed),ffa(embed),tdm2(embed)]
 
-            header = ["Ship", "FFA", "2 Teams"]
+            header = ["Ship", "FFA", "Score", "2 Teams", "Score"]
 
             body = []
 
@@ -79,12 +82,16 @@ class Wrall(Cog):
                 entry = []
                 entry.append(ship)
                 if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0:
-                    entry.append(await lb_format(ship, db2, 'FFA'))
+                    entry.append(await lb_format(ship, db2, 'FFA', True))
+                    entry.append(await lb_format(ship, db2, 'FFA', False))
                 else:
                     entry.append("-----")
+                    entry.append("-----")
                 if db2[ship]["2 Teams"]["High Score"]["1"]["user"] != 0:
-                    entry.append(await lb_format(ship, db2, '2 Teams'))
+                    entry.append(await lb_format(ship, db2, '2 Teams', True))
+                    entry.append(await lb_format(ship, db2, '2 Teams', False))
                 else:
+                    entry.append("-----")
                     entry.append("-----")
                 body.append(entry)
             
