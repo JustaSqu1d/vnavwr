@@ -87,6 +87,7 @@ class Wrall(Cog):
                 else:
                     entry.append("-----")
                 body.append(entry)
+                print(len(entry))
             
             #await gather(*coros)
 
