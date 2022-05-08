@@ -90,9 +90,9 @@ class Wrall(Cog):
             
             #await gather(*coros)
 
-            embed.description = t2a(header=header, body=body, style=PresetStyle.thin_compact)
+            embed.description = 0
 
-            pages.append(Page(embeds=[embed]))
+            pages.append(Page(content=t2a(header=header, body=body, style=PresetStyle.thin_compact)))
 
         paginator = Paginator(pages=pages, loop_pages=True, timeout=30.0, disable_on_timeout=True)
         await paginator.respond(ctx.interaction)
