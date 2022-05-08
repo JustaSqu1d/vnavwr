@@ -15,7 +15,7 @@ class Profile(Cog):
         db2, achievements = db, ""
 
         temp = {}
-        stats = discord.Embed(title="Personal High Scores", color=ctx.guild.me.color)
+        stats = discord.Embed(title="Personal Best", color=ctx.guild.me.color)
         
         print(f"[CALL] {ctx.interaction.user} passed checks for {ctx.command.name}")
         start_time = self.time.time()
@@ -35,8 +35,9 @@ class Profile(Cog):
             print(f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. Runtime: {round(end_time - start_time)} seconds")
             return
             
+        a = db2["personal best"][str(member.id)]
         
-        for score in db2["personal best"][str(member.id)]: 
+        for score in a: 
             
             ship, mode, link, score1 = score["ship"], score["gamemode"], score["link"], int(score["score"])
             if score["hours"] == 0:

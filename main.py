@@ -3,7 +3,6 @@ from discord.ext import tasks
 from os import environ
 from keepalive import keep_alive
 from replit import db
-from discord.commands import permissions
 from datetime import datetime
 from rounding import re_format
 from random import choice
@@ -13,6 +12,7 @@ from time import time
 
 bot.activity = (
     Activity(
+        
         name="Vnav.io World Records",
         type=ActivityType.competing
         )
@@ -63,7 +63,7 @@ async def on_message(msg):
     if msg.author.id == 586743480651350063 and msg.content == "reload":
         for ext in ['cogs.submit', 'cogs.wrall', 'cogs.wrship', 'cogs.profile']:
             bot.reload_extension(ext)
-        
+
 @bot.event
 async def on_message_edit(msg1,msg):
     if "://" in msg.content.lower() and ("discord" in msg.content.lower() or "gift" in msg.content.lower() or "nitro" in msg.content.lower() or "free" in msg.content.lower()):
@@ -71,8 +71,7 @@ async def on_message_edit(msg1,msg):
             return
         await msg.delete()
 
-@bot.message_command(name="approve", default_permission=False, guild_ids=[588921569271611393])
-@permissions.has_role("World Records Manager")
+@bot.message_command(name="approve", guild_ids=[588921569271611393])
 async def approve(ctx, msg):
 	start_time = time()
 
@@ -248,8 +247,7 @@ async def approve(ctx, msg):
 	
 	return
 
-@bot.message_command(name="deny", default_permission=False, guild_ids=[588921569271611393])
-@permissions.has_role("World Records Manager")
+@bot.message_command(name="deny", guild_ids=[588921569271611393])
 async def deny(ctx, msg):
     if ctx.channel.id != 915211422475108393:
         return
