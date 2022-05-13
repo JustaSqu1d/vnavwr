@@ -68,28 +68,42 @@ class Wrall(Cog):
                           color=ctx.guild.me.color)
             embed.set_footer(text="Created by just a squid#5483")
 
-            #coros = [ships_f(embed),ffa(embed),tdm2(embed)]
+            if ctx.author.is_on_mobile():
 
-            header = ["Ship", "FFA", "2TDM"]
+                header = ["Ship", "FFA", "2TDM"]
 
-            body = [
-                [
-                ship,
-                await lb_format(ship, db2, 'FFA') if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0 else "-",
-                await lb_format(ship, db2, '2 Teams') if db2[ship]["2 Teams"]["High Score"]["1"]["user"] != 0 else "-"
-                ]
-                for ship in ships
-            ]
+                body = []
+
+                for ship in ships:
+                    
+                    entry = []
+                    entry.append(f"{ship}")
+                    if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0:
+                        entry.append(await lb_format(ship, db2, 'FFA'))
+                    else:
+                        entry.append("-")
+                    if db2[ship]["2 Teams"]["High Score"]["1"]["user"] != 0:
+                        entry.append(await lb_format(ship, db2, '2 Teams'))
+                    else:
+                        entry.append("-")
+                    body.append(entry)
             
-            #await gather(*coros)
+            
 
-            output = t2a(
-            header=header,
-            body=body,
-            style=PresetStyle.ascii_simple
-            )
+                output = t2a(
+                header=header,
+                body=body,
+                style=PresetStyle.ascii_simple
+                )
 
-            embed.description = f"```ml\n{output}\n```"
+                embed.description = f"```ml\n{output}\n```"
+            
+            else:
+
+                for ship in ships:
+                    coros = [ships_f(embed),ffa(embed),tdm2(embed)]
+                    await gather(*coros)
+
 
             pages.append(Page(embeds=[embed]))
 
