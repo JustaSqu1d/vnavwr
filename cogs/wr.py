@@ -14,8 +14,7 @@ class Wrall(Cog):
         self.bot = bot
 
     @wr.command(name="all",
-                description="Check all the top current World Records!",
-                guild_ids=[588921569271611393])
+                description="Check all the top current World Records!")
     async def worldrecords(self, ctx):
         print(
             f"[CALL] {ctx.interaction.user} passed checks for {ctx.command.name}"
@@ -114,8 +113,7 @@ class Wrall(Cog):
         return
 
     @wr.command(name="ship",
-                description="Look for a specific ship's world records!",
-                guild_ids=[588921569271611393])
+                description="Look for a specific ship's world records!")
     async def worldrecordsship(
         self, ctx, ship: Option(str,
                                 "Pick a ship! We'll handle the rest.",
