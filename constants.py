@@ -30,8 +30,6 @@ places= ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Mobile 1st", "Mobil
 placesPC = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 places_mobile = ["Mobile 1st", "Mobile 2nd", "Mobile 3rd"]
 
-wr = SlashCommandGroup(name="worldrecords", description= "world records and their leaderboards")
-
 class ConfirmButton(ui.View):
   def __init__(self):
     super().__init__(timeout=60)

@@ -1,6 +1,6 @@
 from asyncio import gather
-from constants import shipsall, places, Ships, wr
-from discord import Embed, Option
+from constants import shipsall, places, Ships
+from discord import Embed, Option, SlashCommandGroup
 from discord.ext.commands import Cog
 from discord.ext.pages import Paginator, Page
 from discord.utils import basic_autocomplete
@@ -8,6 +8,8 @@ from replit import db
 from rounding import re_format
 from time import time
 from table2ascii import table2ascii as t2a, PresetStyle
+
+wr = SlashCommandGroup(name="worldrecords", description= "world records and their leaderboards")
 
 class Wrall(Cog):
     def __init__(self, bot):
