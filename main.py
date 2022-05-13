@@ -14,7 +14,12 @@ bot.activity = (
         )
 )
 
-for ext in ['cogs.submit', 'cogs.wr', 'cogs.profile', 'cogs.event', 'cogs.verification']:
+for ext in [
+	'cogs.submit', 
+	#'cogs.wr', 
+	'cogs.profile', 
+	'cogs.event', 
+	'cogs.verification']:
     bot.load_extension(ext)
 
 @tasks.loop(minutes=2)
