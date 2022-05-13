@@ -212,6 +212,5 @@ class Wrall(Cog):
 
         return
 
-
 def setup(bot):
     bot.add_cog(Wrall(bot))
