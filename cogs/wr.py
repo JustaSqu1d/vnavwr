@@ -1,7 +1,6 @@
 from asyncio import gather
-from constants import shipsall, places, Ships
+from constants import shipsall, places, Ships, wr
 from discord import Embed, Option
-from discord.commands import SlashCommandGroup
 from discord.ext.commands import Cog
 from discord.ext.pages import Paginator, Page
 from discord.utils import basic_autocomplete
@@ -13,9 +12,6 @@ from table2ascii import table2ascii as t2a, PresetStyle
 class Wrall(Cog):
     def __init__(self, bot):
         self.bot = bot
-        wr = SlashCommandGroup("worldrecords", "wr")
-
-    
 
     @wr.command(name="all",
                 description="Check all the top current World Records!",
@@ -214,4 +210,5 @@ class Wrall(Cog):
         return
 
 def setup(bot):
+    
     bot.add_cog(Wrall(bot))
