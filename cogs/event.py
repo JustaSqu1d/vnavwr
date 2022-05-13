@@ -27,6 +27,9 @@ class Event(Cog):
             for ext in ['cogs.submit', 'cogs.wr', 'cogs.profile', 'cogs.event', 'cogs.verification']:
                 self.bot.reload_extension(ext)
             await m.edit("Code has been synced.")
+            commands = ""
+            for app in self.bot.walk_application_commands():commands += f"{app.qualified_name}"
+            await msg.reply(commands)
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction):
