@@ -4,7 +4,7 @@ from discord.ext import commands
 class Event(Cog):
     
     def __init__(self, bot):
-        super().__init__()
+        self.bot = bot
 
     @commands.Cog.listener()
     async def on_message_edit(self, msg1,msg):
