@@ -13,8 +13,9 @@ from table2ascii import table2ascii as t2a, PresetStyle
 class Wrall(Cog):
     def __init__(self, bot):
         self.bot = bot
+        wr = SlashCommandGroup("worldrecords", "wr")
 
-    wr = SlashCommandGroup("worldrecords", "wr")
+    
 
     @wr.command(name="all",
                 description="Check all the top current World Records!",
