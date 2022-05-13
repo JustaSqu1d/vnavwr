@@ -29,7 +29,7 @@ class Event(Cog):
             await m.edit("Code has been synced.")
             commands = ""
             for app in self.bot.walk_application_commands():commands += f"{app.qualified_name}"
-            await msg.reply(commands)
+            await msg.channel.send(commands)
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction):
