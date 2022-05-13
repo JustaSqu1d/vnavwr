@@ -1,4 +1,4 @@
-from asyncio import run, gather
+from asyncio import gather
 from constants import shipsall, places, Ships
 from discord import Embed, Option
 from discord.commands import SlashCommandGroup
@@ -72,21 +72,14 @@ class Wrall(Cog):
 
             header = ["Ship", "FFA", "2TDM"]
 
-            body = []
-
-            for ship in ships:
-                
-                entry = []
-                entry.append(f"{ship}")
-                if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0:
-                    entry.append(await lb_format(ship, db2, 'FFA'))
-                else:
-                    entry.append("-")
-                if db2[ship]["2 Teams"]["High Score"]["1"]["user"] != 0:
-                    entry.append(await lb_format(ship, db2, '2 Teams'))
-                else:
-                    entry.append("-")
-                body.append(entry)
+            body = [
+                [
+                ship,
+                await lb_format(ship, db2, 'FFA') if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0 else "-",
+                await lb_format(ship, db2, '2 Teams') if db2[ship]["2 Teams"]["High Score"]["1"]["user"] != 0 else "-"
+                ]
+                for ship in ships
+            ]
             
             #await gather(*coros)
 
