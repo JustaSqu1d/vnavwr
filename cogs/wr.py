@@ -68,14 +68,14 @@ class Wrall(Cog):
                           color=ctx.guild.me.color)
             embed.set_footer(text="Created by just a squid#5483")
 
-            header = ["Ship", "FFA", "2TDM"]
+            header = ["\u001b[0;32mShip", "\u001b[0;32mFFA", "\u001b[0;32m2TDM"]
 
             body = []
 
             for ship in ships:
                 
                 entry = []
-                entry.append(f"{ship}")
+                entry.append(f"\u001b[0;34m{ship}")
                 if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0:
                     entry.append(await lb_format(ship, db2, 'FFA'))
                 else:
@@ -94,7 +94,7 @@ class Wrall(Cog):
             style=PresetStyle.ascii_simple
             )
 
-            embed.description = f"```ml\n{output}\n```"
+            embed.description = f"```ansi\n{output}\n```"
 
 
             pages.append(Page(embeds=[embed]))
