@@ -15,8 +15,8 @@ bot.activity = (
 )
 
 for ext in [
+    'cogs.wr',
 	'cogs.submit', 
-	'cogs.wr', 
 	'cogs.profile', 
 	'cogs.event', 
 	'cogs.verification']:
