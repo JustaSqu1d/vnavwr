@@ -9,11 +9,13 @@ from rounding import re_format
 from time import time
 from table2ascii import table2ascii as t2a, PresetStyle
 
-wr = SlashCommandGroup(name="worldrecords", description= "world records and their leaderboards")
+
 
 class Wrall(Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    wr = SlashCommandGroup(name="worldrecords", description= "world records and their leaderboards")
 
     @wr.command(name="all",
                 description="Check all the top current World Records!")
