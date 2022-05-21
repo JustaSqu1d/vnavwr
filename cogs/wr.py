@@ -9,8 +9,6 @@ from rounding import re_format
 from time import time
 from table2ascii import table2ascii as t2a, PresetStyle
 
-
-
 class Wrall(Cog):
     def __init__(self, bot):
         self.bot = bot

@@ -4,7 +4,7 @@ from time import time
 from datetime import datetime
 from replit import db
 
-bot = Bot(intents=Intents.all())
+bot = Bot(intents=Intents.all(), debug_guilds=[588921569271611393])
 
 Ships = ['Alien Blaster', 'Annihilator', 'Artillery', 'Artillery Shooter', 'Astronaut', 'Auto 4', 'Auto 5', 'Barricade', 'Basic', 'Bat', 'Bomber', 'Boomerang', 'Boomertwin', 'Booster', 'Boosterflip', 'Builder', 'Bushwacker', 'Carrier', 'Conqueror', 'Cruiser', 'Demolisher', 'Drone Addict', 'Drone Trapper', 'Dual', 'Factory', 'Fighter', 'Flank Guard', 'Fortress', 'Galaxian', 'Gunner', 'Gunner Trapper', 'Hulk', 'Hunter', 'Hybrid', 'Machine Gun', 'Mega 3', 'Necromancer', 'Octo Ship', 'Overbomber', 'Overboomerang', 'Overgunner', 'Overlord', 'Polyballs', 'Power Glider', 'Predator', 'Quad Ship', 'Quad-builder', 'Quadlet', 'Quintlet', 'Ranger', 'Savage', 'Skimmer', 'Sniper', 'Space Jet', 'Spike', 'Sprayer', 'Sputnik', 'Stradblock', 'Streamliner', 'Surfer', 'Trappershot', 'Trappetytrap', 'Triple Twin', 'Triplet', 'Twin Flank', 'Twin Laser', 'UFO']
 
