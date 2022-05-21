@@ -32,7 +32,7 @@ class Wrall(Cog):
             us = entry["user"].split("|")
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
-            return f"\u001b[0;31m{score}\n{user.name}"
+            return f"            \u001b[0;31m{score}\n{user.name}"
 
         """
         async def ships_f(embed):
@@ -68,7 +68,7 @@ class Wrall(Cog):
                           color=ctx.guild.me.color)
             embed.set_footer(text="Created by just a squid#5483")
 
-            header = ["\u001b[0;32mShip", "\u001b[0;32mFFA", "\u001b[0;32m2TDM"]
+            header = ["\u001b[0;32mShip", "            \u001b[0;32mFFA", "            \u001b[0;32m2TDM"]
 
             body = []
 
