@@ -32,7 +32,7 @@ class Wrall(Cog):
             us = entry["user"].split("|")
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
-            return f"            \u001b[0;31m{score}\n{user.name}\n"
+            return f"\u001b[0;31m{user.name}-{score}\n"
 
         async def ships_f(embed):
             embed.add_field(name='Ship',
