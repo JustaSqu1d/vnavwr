@@ -32,7 +32,7 @@ class Wrall(Cog):
             us = entry["user"].split("|")
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
-            return f"{score}\n{user.name}"
+            return f"\u001b[0;31m{score}\n{user.name}"
 
         """
         async def ships_f(embed):
@@ -62,7 +62,7 @@ class Wrall(Cog):
                 ]),
                 inline=True)
         """
-        
+
         for ships in shipsall:
             embed = Embed(title="Vnav.io World Records",
                           color=ctx.guild.me.color)

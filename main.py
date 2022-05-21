@@ -39,7 +39,7 @@ async def congrats():
         name=f"{person}'s {score} {ship}",
         type=ActivityType.watching
         )
-    )    
+    )
 
 @bot.event
 async def on_ready():
