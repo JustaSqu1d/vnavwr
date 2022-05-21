@@ -34,7 +34,6 @@ class Wrall(Cog):
             user = await self.bot.fetch_user(us[0])
             return f"            \u001b[0;31m{score}\n{user.name}"
 
-        """
         async def ships_f(embed):
             embed.add_field(name='Ship',
                             value="".join(
@@ -61,13 +60,16 @@ class Wrall(Cog):
                     for ship in ships
                 ]),
                 inline=True)
-        """
 
         for ships in shipsall:
             embed = Embed(title="Vnav.io World Records",
                           color=ctx.guild.me.color)
             embed.set_footer(text="Created by just a squid#5483")
 
+            coros = [ships_f(embed), ffa(embed), tdm2(embed)]
+            await gather(*coros)
+
+            """
             header = ["\u001b[0;32mShip", "            \u001b[0;32mFFA", "            \u001b[0;32m2TDM"]
 
             body = []
@@ -95,6 +97,7 @@ class Wrall(Cog):
             )
 
             embed.description = f"```ansi\n{output}\n```"
+            """
 
 
             pages.append(Page(embeds=[embed]))
