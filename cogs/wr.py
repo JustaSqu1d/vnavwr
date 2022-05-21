@@ -97,10 +97,8 @@ class Wrall(Cog):
                 embed.description = f"```ml\n{output}\n```"
             
             else:
-
-                for ship in ships:
-                    coros = [ships_f(embed),ffa(embed),tdm2(embed)]
-                    await gather(*coros)
+                coros = [ships_f(embed),ffa(embed),tdm2(embed)]
+                await gather(*coros)
 
 
             pages.append(Page(embeds=[embed]))
