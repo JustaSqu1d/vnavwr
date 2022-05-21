@@ -32,7 +32,7 @@ class Wrall(Cog):
             us = entry["user"].split("|")
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
-            return f"\n\u001b[0;31m{user.name}-{score}\n"
+            return f"[```ansi\n\u001b[0;31m{user.name}-{score}\n```]({entry['link']})"
 
         async def ships_f(embed):
             embed.add_field(name='Ship',
@@ -42,25 +42,25 @@ class Wrall(Cog):
 
         async def ffa(embed):
             val = "".join([
-                    "\n\u001b[0;31m-----\n" if db2[ship]["FFA"]["High Score"]["1"]["user"]
+                    "```ansi\n\u001b[0;31m-----\n```" if db2[ship]["FFA"]["High Score"]["1"]["user"]
                     == 0 else await lb_format(ship, db2, 'FFA')
                     for ship in ships
                 ])
             embed.add_field(
                 name='FFA',
-                value=f"```ansi{val}```",
+                value=val,
                 inline=True)
 
         async def tdm2(embed):
             val = "".join([
-                    "\n\u001b[0;31m-----\n"
+                    "```ansi\n\u001b[0;31m-----\n```"
                     if db2[ship]["2 Teams"]["High Score"]["1"]["user"] == 0
                     else await lb_format(ship, db2, '2 Teams')
                     for ship in ships
                 ])
             embed.add_field(
                 name='2 Teams',
-                value= f"```ansi{val}```",
+                value= val,
                 inline=True)
 
         for ships in shipsall:
