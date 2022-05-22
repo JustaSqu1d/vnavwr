@@ -1,9 +1,10 @@
 from asyncio import gather
 from constants import shipsall, places, Ships
-from discord import Embed, Option, SlashCommandGroup
+from discord import Embed, Option, SlashCommandGroup, ButtonStyle
 from discord.ext.commands import Cog
 from discord.ext.pages import Paginator, Page
 from discord.utils import basic_autocomplete
+from discord.ui import View, Button
 from replit import db
 from rounding import re_format
 from time import time
@@ -27,12 +28,13 @@ class Wrall(Cog):
         pages = []
         db2 = db
 
-        async def lb_format(ship, db2, mode):
+        async def lb_format(ship, db2, mode, view):
             entry = db2[ship][mode]["High Score"]["1"]
             us = entry["user"].split("|")
             score = re_format(int(us[1]))
             user = await self.bot.fetch_user(us[0])
-            return f"\n```ansi\n\u001b[0;31m{user.name}-{score}```{entry['link']}"
+            view.add_item(Button(style=ButtonStyle.link,label=f"{user.name}-{score} ({ship})",url=entry["link"]))
+            return f"\n\u001b[0;31m{user.name}-{score}\n"
 
         async def ships_f(embed):
             embed.add_field(name='Ship',
@@ -40,27 +42,27 @@ class Wrall(Cog):
                                 [f"\n**{ship}**\n" for ship in ships]),
                             inline=True)
 
-        async def ffa(embed):
+        async def ffa(embed, view):
             val = "".join([
-                    "\n```ansi\n\u001b[0;31m-----```" if db2[ship]["FFA"]["High Score"]["1"]["user"]
-                    == 0 else await lb_format(ship, db2, 'FFA')
+                    "\n\u001b[0;31m-----\n" if db2[ship]["FFA"]["High Score"]["1"]["user"]
+                    == 0 else await lb_format(ship, db2, 'FFA', view)
                     for ship in ships
                 ])
             embed.add_field(
                 name='FFA',
-                value=val,
+                value=f"```ansi{val}```",
                 inline=True)
 
-        async def tdm2(embed):
+        async def tdm2(embed, view):
             val = "".join([
-                    "\n```ansi\n\u001b[0;31m-----```"
+                    "\n\u001b[0;31m-----\n"
                     if db2[ship]["2 Teams"]["High Score"]["1"]["user"] == 0
-                    else await lb_format(ship, db2, '2 Teams')
+                    else await lb_format(ship, db2, '2 Teams', view)
                     for ship in ships
                 ])
             embed.add_field(
                 name='2 Teams',
-                value= val,
+                value= f"```ansi{val}```",
                 inline=True)
 
         for ships in shipsall:
@@ -68,14 +70,13 @@ class Wrall(Cog):
                           color=ctx.guild.me.color)
             embed.set_footer(text="Created by just a squid#5483")
 
-            coros = [ships_f(embed), ffa(embed), tdm2(embed)]
+            view = View()
+            coros = [ships_f(embed), ffa(embed, view), tdm2(embed, view)]
             await gather(*coros)
 
             """
             header = ["\u001b[0;32mShip", "            \u001b[0;32mFFA", "            \u001b[0;32m2TDM"]
-
             body = []
-
             for ship in ships:
                 
                 entry = []
@@ -91,13 +92,11 @@ class Wrall(Cog):
                 body.append(entry)
         
         
-
             output = t2a(
             header=header,
             body=body,
             style=PresetStyle.ascii_simple
             )
-
             embed.description = f"```ansi\n{output}\n```"
             """
 
@@ -194,6 +193,7 @@ class Wrall(Cog):
 
         embed = Embed(title=f"{ship} ({gamemode}) {category} Leaderboard",
                       color=ctx.guild.me.color)
+        
         coros = [score(embed), time_(embed), player(embed)]
         await gather(*coros)
 
