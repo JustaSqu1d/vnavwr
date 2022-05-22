@@ -103,7 +103,7 @@ class Wrall(Cog):
 
             pages.append(Page(embeds=[embed], custom_view=view))
 
-        paginator = Paginator(pages=pages, loop_pages=True, timeout=30.0, disable_on_timeout=True)
+        paginator = Paginator(pages=pages, loop_pages=True, timeout=120.0, disable_on_timeout=True)
         await paginator.respond(ctx.interaction)
         end_time = time()
         print(
