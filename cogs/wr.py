@@ -8,7 +8,6 @@ from discord.ui import View, Button
 from replit import db
 from rounding import re_format
 from time import time
-from table2ascii import table2ascii as t2a, PresetStyle
 
 class Wrall(Cog):
     def __init__(self, bot):
@@ -37,10 +36,12 @@ class Wrall(Cog):
             return f"\n\u001b[0;31m{user.name}-{score}\n"
 
         async def ships_f(embed):
-            embed.add_field(name='Ship',
-                            value="".join(
-                                [f"\n**{ship}**\n" for ship in ships]),
-                            inline=True)
+            embed.insert_field_at(
+                index = 1,
+                name='Ship',
+                value="".join(
+                    [f"\n**{ship}**\n" for ship in ships]),
+                inline=True)
 
         async def ffa(embed, view):
             val = "".join([
@@ -48,7 +49,8 @@ class Wrall(Cog):
                     == 0 else await lb_format(ship, db2, 'FFA', view)
                     for ship in ships
                 ])
-            embed.add_field(
+            embed.insert_field_at(
+                index = 1,
                 name='FFA',
                 value=f"```ansi{val}```",
                 inline=True)
@@ -60,7 +62,8 @@ class Wrall(Cog):
                     else await lb_format(ship, db2, '2 Teams', view)
                     for ship in ships
                 ])
-            embed.add_field(
+            embed.insert_field_at(
+                index = 2,
                 name='2 Teams',
                 value= f"```ansi{val}```",
                 inline=True)
@@ -74,31 +77,6 @@ class Wrall(Cog):
             coros = [ships_f(embed), ffa(embed, view), tdm2(embed, view)]
             await gather(*coros)
 
-            """
-            header = ["\u001b[0;32mShip", "            \u001b[0;32mFFA", "            \u001b[0;32m2TDM"]
-            body = []
-            for ship in ships:
-                
-                entry = []
-                entry.append(f"\u001b[0;34m{ship}")
-                if db2[ship]["FFA"]["High Score"]["1"]["user"] != 0:
-                    entry.append(await lb_format(ship, db2, 'FFA'))
-                else:
-                    entry.append("-")
-                if db2[ship]["2 Teams"]["High Score"]["1"]["user"] != 0:
-                    entry.append(await lb_format(ship, db2, '2 Teams'))
-                else:
-                    entry.append("-")
-                body.append(entry)
-        
-        
-            output = t2a(
-            header=header,
-            body=body,
-            style=PresetStyle.ascii_simple
-            )
-            embed.description = f"```ansi\n{output}\n```"
-            """
 
 
             pages.append(Page(embeds=[embed], custom_view=view))

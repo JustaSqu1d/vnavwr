@@ -11,7 +11,7 @@ bot.activity = (
     Activity(
         name="Vnav.io World Records",
         type=ActivityType.competing
-        )
+    )
 )
 
 for ext in [
@@ -19,7 +19,8 @@ for ext in [
 	'cogs.submit', 
 	'cogs.profile', 
 	'cogs.event', 
-	'cogs.verification']:
+	'cogs.verification'
+]:
     bot.load_extension(ext)
 
 @tasks.loop(minutes=2)
@@ -43,8 +44,7 @@ async def congrats():
 
 @bot.event
 async def on_ready():
-
-    #print(getenv("REPLIT_DB_URL"))
+    #print(getenv("REPLIT_DB_URL")
     print("Online!")
     congrats.start()
 

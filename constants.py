@@ -1,4 +1,4 @@
-from discord import ui, ButtonStyle, Embed, Color, InputTextStyle, Bot, Intents, SlashCommandGroup
+from discord import ui, ButtonStyle, Embed, Color, InputTextStyle, Bot, Intents
 from discord.ui import Modal, InputText
 from time import time
 from datetime import datetime
@@ -6,18 +6,42 @@ from replit import db
 
 bot = Bot(intents=Intents.all())
 
-Ships = ['Alien Blaster', 'Annihilator', 'Artillery', 'Artillery Shooter', 'Astronaut', 'Auto 4', 'Auto 5', 'Barricade', 'Basic', 'Bat', 'Bomber', 'Boomerang', 'Boomertwin', 'Booster', 'Boosterflip', 'Builder', 'Bushwacker', 'Carrier', 'Conqueror', 'Cruiser', 'Demolisher', 'Drone Addict', 'Drone Trapper', 'Dual', 'Factory', 'Fighter', 'Flank Guard', 'Fortress', 'Galaxian', 'Gunner', 'Gunner Trapper', 'Hulk', 'Hunter', 'Hybrid', 'Machine Gun', 'Mega 3', 'Necromancer', 'Octo Ship', 'Overbomber', 'Overboomerang', 'Overgunner', 'Overlord', 'Polyballs', 'Power Glider', 'Predator', 'Quad Ship', 'Quad-builder', 'Quadlet', 'Quintlet', 'Ranger', 'Savage', 'Skimmer', 'Sniper', 'Space Jet', 'Spike', 'Sprayer', 'Sputnik', 'Stradblock', 'Streamliner', 'Surfer', 'Trappershot', 'Trappetytrap', 'Triple Twin', 'Triplet', 'Twin Flank', 'Twin Laser', 'UFO']
+Ships = ['Alien Blaster', 'Annihilator', 'Artillery', 'Eagle', 'Astronaut', 'Auto 4', 'Auto 5', 'Barricade', 'Basic', 'Bat', 'Bomber', 'Boomerang', 'Boomertwin', 'Booster', 'Boosterflip', 'Builder', 'Bushwacker', 'Carrier', 'Conqueror', 'Cruiser', 'Demolisher', 'Drone Addict', 'Drone Trapper', 'Dual', 'Factory', 'Fighter', 'Flank Guard', 'Fortress', 'Galaxian', 'Gunner', 'Gunner Trapper', 'Hulk', 'Hunter', 'Hybrid', 'Machine Gun', 'Mega 3', 'Necromancer', 'Octo Ship', 'Falcon', 'Overboomerang', 'Overgunner', 'Overlord', 'Polyballs', 'Power Glider', 'Predator', 'Quad Ship', 'Quad-builder', 'Quadlet', 'Quintlet', 'Ranger', 'Savage', 'Skimmer', 'Sniper', 'Space Jet', 'Spike', 'Sprayer', 'Sputnik', 'Stradblock', 'Streamliner', 'Surfer', 'Trappershot', 'Trappetytrap', 'Triple Twin', 'Triplet', 'Twin Flank', 'Twin Laser', 'UFO']
 
-ships1 = ['Alien Blaster', 'Annihilator', 'Artillery', 'Artillery Shooter', 'Astronaut', 'Auto 4', 'Auto 5']
-ships2 = ['Barricade', 'Basic', 'Bat', 'Bomber', 'Boomerang', 'Boomertwin', 'Booster']
-ships3 = ['Boosterflip', 'Builder', 'Bushwacker', 'Carrier', 'Conqueror', 'Cruiser', 'Demolisher']
-ships4 = ['Drone Addict', 'Drone Trapper', 'Dual', 'Factory', 'Fighter', 'Flank Guard', 'Fortress']
-ships5 = ['Galaxian', 'Gunner', 'Gunner Trapper', 'Hulk', 'Hunter', 'Hybrid', 'Machine Gun']
-ships6 = ['Mega 3', 'Necromancer', 'Octo Ship', 'Overbomber', 'Overboomerang', 'Overgunner', 'Overlord']
-ships7 = ['Polyballs', 'Power Glider', 'Predator', 'Quad Ship', 'Quad-builder', 'Quadlet', 'Quintlet']
-ships8 = ['Ranger', 'Savage', 'Skimmer', 'Sniper', 'Space Jet', 'Spike', 'Sprayer']
-ships9 = ['Sputnik', 'Stradblock', 'Streamliner', 'Surfer', 'Trappershot', 'Trappetytrap', 'Triple Twin']
-ships10 = ['Triplet', 'Twin Flank', 'Twin Laser', 'UFO']
+Ships = sorted(Ships)
+
+ships1 = []
+ships2 = []
+ships3 = []
+ships4 = []
+ships5 = []
+ships6 = []
+ships7 = []
+ships8 = []
+ships9 = []
+ships10 = []
+
+for i in range(len(Ships)):
+    if i < 7*1:
+        ships1.append(Ships[i])
+    elif i < 7*2:
+        ships2.append(Ships[i])
+    elif i < 7*3:
+        ships3.append(Ships[i])
+    elif i < 7*4:
+        ships4.append(Ships[i])
+    elif i < 7*5:
+        ships5.append(Ships[i])
+    elif i < 7*6:
+        ships6.append(Ships[i])
+    elif i < 7*7:
+        ships7.append(Ships[i])
+    elif i < 7*8:
+        ships8.append(Ships[i])
+    elif i < 7*9:
+        ships9.append(Ships[i])
+    elif i < 7*10:
+        ships10.append(Ships[i])
 
 shipsall = [ships1, ships2, ships3, ships4, ships5, ships6, ships7, ships8, ships9, ships10]
 modes = ["FFA","2 Teams"]
@@ -42,7 +66,7 @@ class ConfirmButton(ui.View):
 
 class DenialReason(Modal):
     def __init__(self, message, ctx) -> None:
-        super().__init__("Denial Reason")
+        super().__init__(title="Denial Reason")
         self.add_item(InputText(label="Why was this record denied?", placeholder="e.g. teaming, invalid score"))
 
         self.add_item(
@@ -94,7 +118,7 @@ class DenialReason(Modal):
 
 class SubmissionForm(Modal):
     def __init__(self, ctx, ship, gamemode, platform) -> None:
-        super().__init__("Vnav.io World Record Submission Form")
+        super().__init__(title="Vnav.io World Record Submission Form")
         self.add_item(InputText(label="Upload a link to a video of your gameplay:", placeholder="e.g. https://youtu.be/crazy-world-record"))
         self.add_item(InputText(label="Final score:", placeholder="e.g. 100000"))
         self.add_item(InputText(label="In-game hours:", placeholder="e.g. 1"))
