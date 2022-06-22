@@ -1,50 +1,38 @@
-from flask import Flask, Response, request, jsonify, render_template
-from threading import Thread
+from fastapi import FastAPI, Path
 from replit import db
+from pydantic import BaseModel
 from constants import Ships, modes, categories, places
 
+class Body(BaseModel):
+    ship: str
+    mode: str
+    category: str
+    place: str
 
-app = Flask("")
+app = FastAPI()
 
-@app.route("/")
+@app.get("/")
 def home():
-  return "Use https://vnavwr.squidsquidsquid.repl.co/api"
+    return {"message": "Use https://vnavwr.squidsquidsquid.repl.co/docs for some information"} 
 
-@app.route("/api/", methods=['GET', 'POST'])
-def api():
-    data = request.get_json()
-    if data == None:
-        return Response(
-            mimetype="application/json",
-            response={"Bad Request Body.":"Use https://vnavwr.squidsquidsquid.repl.co/docs for some information"},
-            status=400
-        )
-        
-    ship, mode, category, place = str(data["ship"]), str(data["mode"]), str(data["category"]), str(data["place"])
-    if ship not in Ships:
-        return jsonify(
-            {"error":"Invalid ship."}
-        )
-    if mode not in modes:
-        return jsonify(
-            {"error":"Invalid gamemode."}
-        )
-    if category not in categories:
-        return jsonify(
-            {"error":"Invalid category."}
-        )
-    if place not in places:
-        return jsonify(
-            {"error":"Invalid place."}
-        )
+@app.get("/api")
+def api(body: Body):
+    if body.ship not in Ships:
+        return {"error":"Invalid ship."}
+    if body.mode not in modes:
+        return {"error":"Invalid gamemode."}
+    if body.category not in categories:
+        return {"error":"Invalid category."}
+    if body.place not in places:
+        return {"error":"Invalid place."}
     try:
         dict = {
-            "user_id": db[ship][mode][category][place]["user"].split("|")[0],
-            "score": db[ship][mode][category][place]["user"].split("|")[1],
-            "link": db[ship][mode][category][place]["link"],
-            "hours": db[ship][mode][category][place]["hour"],
-            "minutes": db[ship][mode][category][place]["min"],
-            "seconds": db[ship][mode][category][place]["sec"]
+            "user_id": db[body.ship][body.mode][body.category][body.place]["user"].split("|")[0],
+            "score": db[body.ship][body.mode][body.category][body.place]["user"].split("|")[1],
+            "link": db[body.ship][body.mode][body.category][body.place]["link"],
+            "hours": db[body.ship][body.mode][body.category][body.place]["hour"],
+            "minutes": db[body.ship][body.mode][body.category][body.place]["min"],
+            "seconds": db[body.ship][body.mode][body.category][body.place]["sec"]
         }
     except:
         dict = {
@@ -55,15 +43,4 @@ def api():
             "minutes": 0,
             "seconds": 0
         }
-    return jsonify(dict)
-
-@app.route("/docs")
-def docs():
-    return render_template("docs.html")
-
-def run():
-  app.run(host='0.0.0.0',port=8080)
-
-def keep_alive():
-  t = Thread(target=run)
-  t.start()
+    return dict
