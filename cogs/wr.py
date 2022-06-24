@@ -185,7 +185,13 @@ class Wrall(Cog):
         )
 
         return
+                
+    @wr.command(name="api",
+                description="For developer nerds only.")
+    async def api(self,ctx):
+        await ctx.respond(embed=Embed(title="Vnav.io World Records API", url="https://vnavwr.squidsquidsquid.repl.co/docs"), ephemeral = True)
 
+    
 def setup(bot):
     
     bot.add_cog(Wrall(bot))

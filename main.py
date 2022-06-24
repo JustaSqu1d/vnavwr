@@ -1,11 +1,11 @@
 from discord import Activity, ActivityType
 from discord.ext import tasks
-from os import environ, system #, getenv
+from os import environ #, getenv
 from replit import db
+from keepalive import keepalive
 from rounding import re_format
 from random import choice
 from constants import bot, Ships, modes
-from multiprocessing import Process
 
 bot.activity = (
     Activity(
@@ -48,7 +48,5 @@ async def on_ready():
     print("Online!")
     congrats.start()
 
-api = Process(target=system, args=("uvicorn keepalive:app",))
-api.start()
-api.join()
-bot.run(environ['BOTTOKEN'], reconnect = True)
+keepalive()
+bot.run(environ['BOTTOKEN'])
