@@ -6,7 +6,7 @@ from os import system
 from fastapi.middleware.cors import CORSMiddleware
 
 def api_run():
-    api = Thread(target=system, args=("uvicorn api:app --host 0.0.0.0",))
+    api = Thread(target=system, args=("uvicorn api:app --host 0.0.0.0 --port 8080",))
     api.start()
 
 class Body(BaseModel):
