@@ -8,6 +8,7 @@ from bson import encode
 from bson.raw_bson import RawBSONDocument
 
 bot = Bot(intents=Intents.all())
+
 cluster = MongoClient(environ.get("DBCONN"))
 dbs = cluster["discord"]
 bot.db = dbs["wr"]
