@@ -24,6 +24,7 @@ for ext in [
 
 @tasks.loop(minutes=2)
 async def congrats():
+    db = bot.db.find_one({"Name":"WR"})
     while True:
         ship = choice(Ships)
         mode = choice(modes)
