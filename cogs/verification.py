@@ -3,7 +3,9 @@ from discord.ext.commands import Cog
 from constants import bot, placesPC, places_mobile, DenialReason
 from time import time
 from datetime import datetime
-from replit import db
+from bson import encode
+from bson.raw_bson import RawBSONDocument
+
 
 class Verification(Cog):
     
@@ -28,30 +30,30 @@ class Verification(Cog):
         print(f"[CALL] {ctx.interaction.user} passed checks for {ctx.command.name}")
         
         await ctx.defer(ephemeral=True)
-        
-        try:
-            author_id = db["submissions"][str(msg.id)]["author"]
-        except KeyError:
-            await ctx.followup.send("This has already been approved!")
-        
-        ship, seconds, minutes, hours, evidence, score, platform, gamemode = db["submissions"][str(msg.id)]["ship"], db["submissions"][str(msg.id)]["sec"], db["submissions"][str(msg.id)]["min"],db["submissions"][str(msg.id)]["hour"], db["submissions"][str(msg.id)]["link"], db["submissions"][str(msg.id)]["score"], db["submissions"][str(msg.id)]["platform"], db["submissions"][str(msg.id)]["gamemode"]
+
+        submissions = bot.db.find_one({"_id": "submissions"})
+
+        if msg.id not in submissions:
+            await ctx.followup.send("No submission found.")
+            end_time = time()
+            print(f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. Runtime: {round(end_time - start_time)} seconds")
+            return
+            
+        submission = submissions[msg.id]
+        author_id = submission["author_id"]
+
+        ship, seconds, minutes, hours, evidence, score, platform, gamemode = submission["ship"], submission["sec"], submission["min"],submission["hour"], submission["link"], submission["score"], submission["platform"], submission["gamemode"]
         IGtimesec = (seconds) + (minutes*60) + (hours*3600)
         
         mobile = False if platform == "PC" else True
         
         arry = {author_id:{"author_id":author_id, "score":score, "evidence":evidence, "hours":hours, "minutes":minutes, "seconds":seconds, "mobile":mobile}}
         
-        if str(author_id) not in db["personal best"]:
-            db["personal best"][str(author_id)] = []
-    
-        db["personal best"][str(author_id)].append({})
-        db["personal best"][str(author_id)][0]["ship"] = ship
-        db["personal best"][str(author_id)][0]["link"] = evidence
-        db["personal best"][str(author_id)][0]["gamemode"] = gamemode
-        db["personal best"][str(author_id)][0]["hours"] = hours
-        db["personal best"][str(author_id)][0]["minutes"] = minutes
-        db["personal best"][str(author_id)][0]["seconds"] = seconds
-        db["personal best"][str(author_id)][0]["score"] = score
+        if str(author_id) not in bot.db.find_one({"_id": "personal best"}):
+            bot.db.update_one({"_id": "personal best"}, {"$set": RawBSONDocument(encode({str(author_id) : []}))})
+
+        pbs = bot.db.find_one({"_id": "personal best"})
+        pbs[str(author_id)].append(arry)
         
         categories = ["High Score"]
         
@@ -61,7 +63,9 @@ class Verification(Cog):
             categories.append("Fast 1m")
         if score >= 1500000:
             categories.append("Fast 1.5m")
-        
+
+        db = bot.db.find_one({"Name":"WR"})
+
         for author in arry.copy():
             for category in categories:
                 IGtimesec = (arry[author]["seconds"]) + (arry[author]["minutes"]*60) + (arry[author]["hours"]*3600)
@@ -69,11 +73,31 @@ class Verification(Cog):
             if arry[author]["mobile"]:
                 for place in places_mobile:
                     if db[ship][gamemode][category][place]["user"] == 0:
-                        db[ship][gamemode][category][place]["user"] = f'{author_id}|{score}'
-                        db[ship][gamemode][category][place]["link"] = evidence
-                        db[ship][gamemode][category][place]["hour"] = hours
-                        db[ship][gamemode][category][place]["min"] = minutes
-                        db[ship][gamemode][category][place]["sec"] = seconds
+                        bot.db.update_one({"_id": "WR"}, 
+                            {"$set": 
+                                {ship : 
+                                    RawBSONDocument(
+                                        encode(
+                                            { gamemode: 
+                                                { category : 
+                                                    { place : 
+                                                        {
+                                                            {
+                                                                "user":  f'{author_id}|{score}',
+                                                                "link": evidence,
+                                                                "hour": hours,
+                                                                "min": minutes,
+                                                                "sec": seconds,
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        )
+                                    )
+                                }
+                            }
+                        )
                         break
         
                     elif "Fast" in category:
@@ -90,12 +114,36 @@ class Verification(Cog):
                             
                             arry.update({author_id2:{"author_id":author_id2, "score":score2, "evidence":evidence2, "hours":hours2, "minutes":minutes2, "seconds":seconds2, "mobile": True}})
                             IGtimesec = (seconds2) + (minutes2*60) + (hours2*3600)
-        
-                            db[ship][gamemode][category][place]["user"] = f'{arry[author]["author_id"]}|{arry[author]["score"]}'
-                            db[ship][gamemode][category][place]["link"] = arry[author]["evidence"]
-                            db[ship][gamemode][category][place]["hour"] = arry[author]["hours"]
-                            db[ship][gamemode][category][place]["min"] = arry[author]["minutes"]
-                            db[ship][gamemode][category][place]["sec"] = arry[author]["seconds"]
+
+                            bot.db.update_one(
+                                {
+                                    "_id": "WR"
+                                }, 
+                                {"$set": 
+                                    {ship : 
+                                        RawBSONDocument(
+                                            encode(
+                                                { gamemode: 
+                                                    { category : 
+                                                        { place : 
+                                                            {
+                                                                {
+                                                                    "user": f'{arry[author]["author_id"]}|{arry[author]["score"]}',
+                                                                    "link": arry[author]["evidence"],
+                                                                    "hour": arry[author]["hours"],
+                                                                    "min": arry[author]["minutes"],
+                                                                    "sec": arry[author]["seconds"],
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            )
+                                        )
+                                    }
+                                }
+                            )
+
                             break
         
                     else:
@@ -112,22 +160,70 @@ class Verification(Cog):
                             seconds2 = db[ship][gamemode][category][place]["sec"]
                             
                             arry.update({author_id2:{"author_id":author_id2, "score":score2, "evidence":evidence2, "hours":hours2, "minutes":minutes2, "seconds":seconds2, "mobile": True}})
-        
-                            db[ship][gamemode][category][place]["user"] = f'{arry[author]["author_id"]}|{arry[author]["score"]}'
-                            db[ship][gamemode][category][place]["link"] = arry[author]["evidence"]
-                            db[ship][gamemode][category][place]["hour"] = arry[author]["hours"]
-                            db[ship][gamemode][category][place]["min"] = arry[author]["minutes"]
-                            db[ship][gamemode][category][place]["sec"] = arry[author]["seconds"]
+
+                            bot.db.update_one(
+                                {
+                                    "_id": "WR"
+                                }, 
+                                {"$set": 
+                                    {ship : 
+                                        RawBSONDocument(
+                                            encode(
+                                                { gamemode: 
+                                                    { category : 
+                                                        { place : 
+                                                            {
+                                                                {
+                                                                    "user": f'{arry[author]["author_id"]}|{arry[author]["score"]}',
+                                                                    "link": arry[author]["evidence"],
+                                                                    "hour": arry[author]["hours"],
+                                                                    "min": arry[author]["minutes"],
+                                                                    "sec": arry[author]["seconds"],
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            )
+                                        )
+                                    }
+                                }
+                            )
+
                             break
                     
             for place in placesPC: #not mobile / is mobile
         
                 if db[ship][gamemode][category][place]["user"] == 0:
-                    db[ship][gamemode][category][place]["user"] = f'{author_id}|{score}'
-                    db[ship][gamemode][category][place]["link"] = evidence
-                    db[ship][gamemode][category][place]["hour"] = hours
-                    db[ship][gamemode][category][place]["min"] = minutes
-                    db[ship][gamemode][category][place]["sec"] = seconds
+                    bot.db.update_one(
+                        {
+                            "_id": "WR"
+                        }, 
+                        {
+                            "$set": 
+                            {ship : 
+                                RawBSONDocument(
+                                    encode(
+                                        { gamemode: 
+                                            { category : 
+                                                { place : 
+                                                    {
+                                                        {
+                                                            "user":  f'{author_id}|{score}',
+                                                            "link": evidence,
+                                                            "hour": hours,
+                                                            "min": minutes,
+                                                            "sec": seconds,
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    )
+                                )
+                            }
+                        }
+                    )
                     break
         
                 elif "Fast" in category:
@@ -145,11 +241,34 @@ class Verification(Cog):
                         arry.update({author_id2:{"author_id":author_id2, "score":score2, "evidence":evidence2, "hours":hours2, "minutes":minutes2, "seconds":seconds2, "mobile": False}})
                         IGtimesec = (seconds2) + (minutes2*60) + (hours2*3600)
         
-                        db[ship][gamemode][category][place]["user"] = f'{arry[author]["author_id"]}|{arry[author]["score"]}'
-                        db[ship][gamemode][category][place]["link"] = arry[author]["evidence"]
-                        db[ship][gamemode][category][place]["hour"] = arry[author]["hours"]
-                        db[ship][gamemode][category][place]["min"] = arry[author]["minutes"]
-                        db[ship][gamemode][category][place]["sec"] = arry[author]["seconds"]
+                        bot.db.update_one(
+                                {
+                                    "_id" : "WR"
+                                }, 
+                                {"$set" : 
+                                    {ship : 
+                                        RawBSONDocument(
+                                            encode(
+                                                { gamemode: 
+                                                    { category : 
+                                                        { place : 
+                                                            {
+                                                                {
+                                                                    "user": f'{arry[author]["author_id"]}|{arry[author]["score"]}',
+                                                                    "link": arry[author]["evidence"],
+                                                                    "hour": arry[author]["hours"],
+                                                                    "min": arry[author]["minutes"],
+                                                                    "sec": arry[author]["seconds"],
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            )
+                                        )
+                                    }
+                                }
+                            )
                         break
         
                 else:
@@ -167,14 +286,36 @@ class Verification(Cog):
                         
                         arry.update({author_id2:{"author_id":author_id2, "score":score2, "evidence":evidence2, "hours":hours2, "minutes":minutes2, "seconds":seconds2, "mobile": False}})
         
-                        db[ship][gamemode][category][place]["user"] = f'{arry[author]["author_id"]}|{arry[author]["score"]}'
-                        db[ship][gamemode][category][place]["link"] = arry[author]["evidence"]
-                        db[ship][gamemode][category][place]["hour"] = arry[author]["hours"]
-                        db[ship][gamemode][category][place]["min"] = arry[author]["minutes"]
-                        db[ship][gamemode][category][place]["sec"] = arry[author]["seconds"]
+                        bot.db.update_one(
+                            {
+                                "_id" : "WR"
+                            }, 
+                            {"$set" : 
+                                {ship : 
+                                    RawBSONDocument(
+                                        encode(
+                                            { gamemode: 
+                                                { category : 
+                                                    { place : 
+                                                        {
+                                                            {
+                                                                "user": f'{arry[author]["author_id"]}|{arry[author]["score"]}',
+                                                                "link": arry[author]["evidence"],
+                                                                "hour": arry[author]["hours"],
+                                                                "min": arry[author]["minutes"],
+                                                                "sec": arry[author]["seconds"],
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        )
+                                    )
+                                }
+                            }
+                        )
                         break
         
-        del(db["submissions"][str(msg.id)])
         embed = msg.embeds[0]
         embed.color = Color.green()
         embed.timestamp = datetime.now()

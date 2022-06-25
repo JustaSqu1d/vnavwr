@@ -1,8 +1,7 @@
 from discord import Activity, ActivityType
 from discord.ext import tasks
 from os import environ #, getenv
-from replit import db
-from keepalive import keepalive
+from api import api_run
 from rounding import re_format
 from random import choice
 from constants import bot, Ships, modes
@@ -48,5 +47,5 @@ async def on_ready():
     print("Online!")
     congrats.start()
 
-keepalive()
+api_run()
 bot.run(environ['BOTTOKEN'])

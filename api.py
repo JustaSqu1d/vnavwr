@@ -1,12 +1,11 @@
 from fastapi import FastAPI
-from replit import db
 from pydantic import BaseModel
-from constants import Ships, modes, categories, places
+from constants import Ships, modes, categories, places, bot
 from threading import Thread
 from os import system
 from fastapi.middleware.cors import CORSMiddleware
 
-def keepalive():
+def api_run():
     api = Thread(target=system, args=("uvicorn keepalive:app --host 0.0.0.0",))
     api.start()
 
@@ -45,6 +44,7 @@ def api(body: Body):
         return {"error":"Invalid category.","Valid categories":" | ".join(categories)}
     if body.place not in places:
         return {"error":"Invalid place.","Valid places":" | ".join(places)}
+    db =  bot.db.find_one({"Name":"WR"})
     try:
         dict = {
             "user_id": db[body.ship][body.mode][body.category][body.place]["user"].split("|")[0],

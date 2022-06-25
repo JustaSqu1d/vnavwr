@@ -1,11 +1,10 @@
 from asyncio import gather
-from constants import shipsall, places, Ships
-from discord import Embed, Option, SlashCommandGroup, ButtonStyle
-from discord.ext.commands import Cog
-from discord.ext.pages import Paginator, Page
-from discord.utils import basic_autocomplete
 from discord.ui import View, Button
-from replit import db
+from discord.utils import basic_autocomplete
+from constants import shipsall, places, Ships, bot
+from discord import Embed, Option, SlashCommandGroup, ButtonStyle
+from discord.ext.pages import Paginator, Page
+from discord.ext.commands import Cog
 from rounding import re_format
 from time import time
 
@@ -25,7 +24,7 @@ class Wrall(Cog):
 
         start_time = time()
         pages = []
-        db2 = db
+        db2 = bot.db.find_one({"Name":"WR"})
 
         async def lb_format(ship, db2, mode, view):
             entry = db2[ship][mode]["High Score"]["1"]
@@ -167,7 +166,7 @@ class Wrall(Cog):
                                   ]),
                                   inline=True)
 
-        db2 = db
+        db2 = bot.db.find_one({"Name":"WR"})
 
         embed = Embed(title=f"{ship} ({gamemode}) {category} Leaderboard",
                       color=ctx.guild.me.color)
@@ -191,7 +190,5 @@ class Wrall(Cog):
     async def api(self,ctx):
         await ctx.respond(embed=Embed(title="Vnav.io World Records API", url="https://vnavwr.squidsquidsquid.repl.co/docs"), ephemeral = True)
 
-    
 def setup(bot):
-    
     bot.add_cog(Wrall(bot))

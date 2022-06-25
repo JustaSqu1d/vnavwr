@@ -1,7 +1,8 @@
 from discord.commands import user_command
 from discord.ext.commands import Cog
 import discord
-from replit import db
+from constants import bot
+
 from rounding import re_format
 import time
 
@@ -12,7 +13,7 @@ class Profile(Cog):
     
     @user_command(name="Profile", guild_ids=[588921569271611393], default_permission=True)
     async def profile(self, ctx, member) -> None:
-        db2, achievements = db, ""
+        achievements = ""
 
         temp = {}
         stats = discord.Embed(title="Personal Best", color=ctx.guild.me.color)
@@ -22,9 +23,9 @@ class Profile(Cog):
         
         await ctx.defer(ephemeral=True)
         
-        try:
-            db2["personal best"][str(member.id)]
-        except:
+        personal_bests = bot.db.find_one({"_id": "personal best"})
+
+        if member.id not in personal_bests:
             achievements = "None. Use `/submit` to submit a run."
         
             stats.description=achievements
@@ -34,10 +35,8 @@ class Profile(Cog):
             end_time = self.time.time()
             print(f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. Runtime: {round(end_time - start_time)} seconds")
             return
-            
-        a = db2["personal best"][str(member.id)]
         
-        for score in a: 
+        for score in personal_bests: 
             
             ship, mode, link, score1 = score["ship"], score["gamemode"], score["link"], int(score["score"])
             if score["hours"] == 0:

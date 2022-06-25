@@ -2,9 +2,15 @@ from discord import ui, ButtonStyle, Embed, Color, InputTextStyle, Bot, Intents
 from discord.ui import Modal, InputText
 from time import time
 from datetime import datetime
-from replit import db
+from pymongo import MongoClient
+from os import environ
+from bson import encode
+from bson.raw_bson import RawBSONDocument
 
 bot = Bot(intents=Intents.all())
+cluster = MongoClient(environ.get("DBCONN"))
+dbs = cluster["discord"]
+bot.db = dbs["wr"]
 
 Ships = ['Alien Blaster', 'Annihilator', 'Artillery', 'Eagle', 'Astronaut', 'Auto 4', 'Auto 5', 'Barricade', 'Basic', 'Bat', 'Bomber', 'Boomerang', 'Boomertwin', 'Booster', 'Boosterflip', 'Builder', 'Bushwacker', 'Carrier', 'Conqueror', 'Cruiser', 'Demolisher', 'Drone Addict', 'Drone Trapper', 'Dual', 'Factory', 'Fighter', 'Flank Guard', 'Fortress', 'Galaxian', 'Gunner', 'Gunner Trapper', 'Hulk', 'Hunter', 'Hybrid', 'Machine Gun', 'Mega 3', 'Necromancer', 'Octo Ship', 'Falcon', 'Overboomerang', 'Overgunner', 'Overlord', 'Polyballs', 'Power Glider', 'Predator', 'Quad Ship', 'Quad-builder', 'Quadlet', 'Quintlet', 'Ranger', 'Savage', 'Skimmer', 'Sniper', 'Space Jet', 'Spike', 'Sprayer', 'Sputnik', 'Stradblock', 'Streamliner', 'Surfer', 'Trappershot', 'Trappetytrap', 'Triple Twin', 'Triplet', 'Twin Flank', 'Twin Laser', 'UFO']
 
@@ -97,13 +103,18 @@ class DenialReason(Modal):
         embed2 = Embed(title="Your submission has been denied...",url=msg.jump_url,color=Color.red())
         embed2.add_field(name="Reason",value=self.children[0].value)
         embed2.add_field(name="Details",value=self.children[1].value)
-        try:
-            author = db["submissions"][str(msg.id)]["author"]
-        except KeyError:
-            await interaction.response.send_message("Invalid submission!", ephemeral=True)
+
+        submissions = bot.db.find_one({"_id": "submissions"})
+
+        if msg.id not in submissions:
+            await ctx.followup.send("No submission found.")
+            end_time = time()
+            print(f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. Runtime: {round(end_time - start_time)} seconds")
             return
+            
+        
         author = await bot.fetch_user(author)
-        del(db["submissions"][str(msg.id)])
+        # denied can be re-approved
 
         try:
             await author.send(embed=embed2)
@@ -190,17 +201,33 @@ class SubmissionForm(Modal):
         channel = await ctx.guild.fetch_channel(915211422475108393)
 
         msg = await channel.send(embed=embed)
-        db["submissions"][str(msg.id)] = {}
-        db["submissions"][str(msg.id)]["author"] = ctx.author.id
-        db["submissions"][str(msg.id)]["user"] = ctx.author.name
-        db["submissions"][str(msg.id)]["ship"] = ship
-        db["submissions"][str(msg.id)]["sec"] = seconds
-        db["submissions"][str(msg.id)]["min"] = minutes
-        db["submissions"][str(msg.id)]["hour"] = hours
-        db["submissions"][str(msg.id)]["link"] = evidence
-        db["submissions"][str(msg.id)]["score"] = score
-        db["submissions"][str(msg.id)]["platform"] = platform
-        db["submissions"][str(msg.id)]["gamemode"] = gamemode
+
+        bot.db.update_one(
+            {
+                "_id" : "submissions"
+            }, 
+            {"$set" : 
+                {str(msg.id) : 
+                    RawBSONDocument(
+                        encode(
+                            {
+                                "author_id" : ctx.author.id,
+                                "user" : ctx.author.name,
+                                "ship" : ship,
+                                "gamemode" : gamemode,
+                                "platform" : platform,
+                                "link" : evidence,
+                                "score" : score,
+                                "hour" : hours,
+                                "min" : minutes,
+                                "sec" : seconds,
+                            }
+                        )
+                    )
+                }
+            }
+        )
+            
         
         end_time = time()
         print(f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. Runtime: {round(end_time - start_time)} seconds")
