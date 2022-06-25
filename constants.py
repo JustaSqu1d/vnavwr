@@ -10,7 +10,7 @@ from bson.raw_bson import RawBSONDocument
 bot = Bot(intents=Intents.all())
 
 cluster = MongoClient(environ.get("DBCONN"))
-dbs = cluster["discord"]
+dbs = cluster["vnavwr"]
 bot.db = dbs["wr"]
 
 Ships = ['Alien Blaster', 'Annihilator', 'Artillery', 'Eagle', 'Astronaut', 'Auto 4', 'Auto 5', 'Barricade', 'Basic', 'Bat', 'Bomber', 'Boomerang', 'Boomertwin', 'Booster', 'Boosterflip', 'Builder', 'Bushwacker', 'Carrier', 'Conqueror', 'Cruiser', 'Demolisher', 'Drone Addict', 'Drone Trapper', 'Dual', 'Factory', 'Fighter', 'Flank Guard', 'Fortress', 'Galaxian', 'Gunner', 'Gunner Trapper', 'Hulk', 'Hunter', 'Hybrid', 'Machine Gun', 'Mega 3', 'Necromancer', 'Octo Ship', 'Falcon', 'Overboomerang', 'Overgunner', 'Overlord', 'Polyballs', 'Power Glider', 'Predator', 'Quad Ship', 'Quad-builder', 'Quadlet', 'Quintlet', 'Ranger', 'Savage', 'Skimmer', 'Sniper', 'Space Jet', 'Spike', 'Sprayer', 'Sputnik', 'Stradblock', 'Streamliner', 'Surfer', 'Trappershot', 'Trappetytrap', 'Triple Twin', 'Triplet', 'Twin Flank', 'Twin Laser', 'UFO']
