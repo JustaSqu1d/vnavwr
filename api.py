@@ -5,9 +5,11 @@ from threading import Thread
 from os import system
 from fastapi.middleware.cors import CORSMiddleware
 
+
 def api_run():
     api = Thread(target=system, args=("uvicorn api:app --host 0.0.0.0 --port 8080",))
     api.start()
+
 
 class Body(BaseModel):
     ship: str
@@ -15,10 +17,8 @@ class Body(BaseModel):
     category: str
     place: str
 
-app = FastAPI(
-    title="Vnav.io World Records API",
-    version="1.1.0"
-)
+
+app = FastAPI(title="Vnav.io World Records API", version="1.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,27 +32,34 @@ app.add_middleware(
 @app.get("/", status_code=203)
 def home():
     return
-    
+
 
 @app.post("/api")
 def api(body: Body):
     if body.ship not in Ships:
-        return {"error":"Invalid ship.","Valid ships":" | ".join(Ships)}
+        return {"error": "Invalid ship.", "Valid ships": " | ".join(Ships)}
     if body.mode not in modes:
-        return {"error":"Invalid gamemode.","Valid gamemodes":" | ".join(modes)}
+        return {"error": "Invalid gamemode.", "Valid gamemodes": " | ".join(modes)}
     if body.category not in categories:
-        return {"error":"Invalid category.","Valid categories":" | ".join(categories)}
+        return {
+            "error": "Invalid category.",
+            "Valid categories": " | ".join(categories),
+        }
     if body.place not in places:
-        return {"error":"Invalid place.","Valid places":" | ".join(places)}
-    db =  bot.db.find_one({"Name":"WR"})
+        return {"error": "Invalid place.", "Valid places": " | ".join(places)}
+    db = bot.db.find_one({"Name": "WR"})
     try:
         dict = {
-            "user_id": db[body.ship][body.mode][body.category][body.place]["user"].split("|")[0],
-            "score": db[body.ship][body.mode][body.category][body.place]["user"].split("|")[1],
+            "user_id": db[body.ship][body.mode][body.category][body.place][
+                "user"
+            ].split("|")[0],
+            "score": db[body.ship][body.mode][body.category][body.place]["user"].split(
+                "|"
+            )[1],
             "link": db[body.ship][body.mode][body.category][body.place]["link"],
             "hours": db[body.ship][body.mode][body.category][body.place]["hour"],
             "minutes": db[body.ship][body.mode][body.category][body.place]["min"],
-            "seconds": db[body.ship][body.mode][body.category][body.place]["sec"]
+            "seconds": db[body.ship][body.mode][body.category][body.place]["sec"],
         }
     except:
         dict = {
@@ -61,6 +68,6 @@ def api(body: Body):
             "link": 0,
             "hours": 0,
             "minutes": 0,
-            "seconds": 0
+            "seconds": 0,
         }
     return dict

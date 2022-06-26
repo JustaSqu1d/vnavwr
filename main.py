@@ -1,30 +1,26 @@
 from discord import Activity, ActivityType
 from discord.ext import tasks
-from os import environ #, getenv
+from os import environ  # , getenv
 from api import api_run
 from rounding import re_format
 from random import choice
 from constants import bot, Ships, modes
 
-bot.activity = (
-    Activity(
-        name="Vnav.io World Records",
-        type=ActivityType.competing
-    )
-)
+bot.activity = Activity(name="Vnav.io World Records", type=ActivityType.competing)
 
 for ext in [
-    'cogs.wr',
-	'cogs.submit', 
-	'cogs.profile', 
-	'cogs.event', 
-	'cogs.verification'
+    "cogs.wr",
+    "cogs.submit",
+    "cogs.profile",
+    "cogs.event",
+    "cogs.verification",
 ]:
     bot.load_extension(ext)
 
+
 @tasks.loop(minutes=2)
 async def congrats():
-    db = bot.db.find_one({"Name":"WR"})
+    db = bot.db.find_one({"Name": "WR"})
     while True:
         ship = choice(Ships)
         mode = choice(modes)
@@ -36,17 +32,17 @@ async def congrats():
             person = person.name
             break
 
-    await bot.change_presence(activity = Activity(
-        name=f"{person}'s {score} {ship}",
-        type=ActivityType.watching
-        )
+    await bot.change_presence(
+        activity=Activity(name=f"{person}'s {score} {ship}", type=ActivityType.watching)
     )
+
 
 @bot.event
 async def on_ready():
-    #print(getenv("REPLIT_DB_URL")
+    # print(getenv("REPLIT_DB_URL")
     print("Online!")
     congrats.start()
 
+
 api_run()
-bot.run(environ['BOTTOKEN'])
+bot.run(environ["BOTTOKEN"])
