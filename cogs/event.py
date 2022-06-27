@@ -1,5 +1,5 @@
-from discord.ext.commands import Cog
 from discord.ext import commands
+from discord.ext.commands import Cog
 
 
 class Event(Cog):

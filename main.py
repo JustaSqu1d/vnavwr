@@ -1,10 +1,12 @@
+from os import environ  # , getenv
+from random import choice
+
 from discord import Activity, ActivityType
 from discord.ext import tasks
-from os import environ  # , getenv
+
 from api import api_run
+from constants import Ships, bot, modes
 from rounding import re_format
-from random import choice
-from constants import bot, Ships, modes
 
 bot.activity = Activity(name="Vnav.io World Records", type=ActivityType.competing)
 
@@ -41,36 +43,7 @@ async def congrats():
 async def on_ready():
     print("Online!")
     congrats.start()
-    from constants import categories, places
-    db = bot.db.find_one({"Name": "WR"})
-    for ship in Ships:
-        for mode in modes:
-            for category in categories:
-                for place in places:
-                    entry = db[ship][mode][category][place]
-                    if entry["user"] != 0:
-                        user = entry["user"].split("|")[0]
-                        score = entry["user"].split("|")[1]
-                        link = entry["link"]
-                        hour = entry["hour"]
-                        minute = entry["min"]
-                        second = entry["sec"]
 
-                        entry = {
-                            "user": user,
-                            "score": score,
-                            "link": link,
-                            "hour": hour,
-                            "minute": minute,
-                            "second": second,
-                            "ship" : ship,
-                            "mode" : mode,
-                        }
 
-                        entry_name = f"{user} | {score} {ship} {mode}"
-
-                        bot.db.update_one(
-                            {"_id":"personal best"}, {"$set": {entry_name: entry}}
-                        )
 api_run()
 bot.run(environ["BOTTOKEN"])

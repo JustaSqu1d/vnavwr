@@ -1,11 +1,12 @@
-from discord import ui, ButtonStyle, Embed, Color, InputTextStyle, Bot, Intents
-from discord.ui import Modal, InputText
-from time import time
 from datetime import datetime
-from pymongo import MongoClient
 from os import environ
+from time import time
+
 from bson import encode
 from bson.raw_bson import RawBSONDocument
+from discord import Bot, ButtonStyle, Color, Embed, InputTextStyle, Intents, ui
+from discord.ui import InputText, Modal
+from pymongo import MongoClient
 
 bot = Bot(intents=Intents.all())
 

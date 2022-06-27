@@ -1,10 +1,10 @@
-from discord.commands import user_command
-from discord.ext.commands import Cog
+import time
+
 import discord
 from constants import bot
-
+from discord.commands import user_command
+from discord.ext.commands import Cog
 from rounding import re_format
-import time
 
 
 class Profile(Cog):
@@ -26,9 +26,15 @@ class Profile(Cog):
 
         await ctx.defer(ephemeral=True)
 
-        personal_bests = bot.db.find_one({"_id": "personal best"})
+        all_entries = bot.db.find_one({"_id": "personal best"})
 
-        if member.id not in personal_bests:
+        entries = []
+
+        for key in all_entries.keys():
+            if member.id in key:
+                entries.append(key)
+
+        if entries == []:
             achievements = "None. Use `/submit` to submit a run."
 
             stats.description = achievements
@@ -40,6 +46,11 @@ class Profile(Cog):
                 f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. Runtime: {round(end_time - start_time)} seconds"
             )
             return
+
+        personal_bests = {}
+
+        for entry in entries:
+            personal_bests[entry] = all_entries[entry]
 
         for score in personal_bests:
 

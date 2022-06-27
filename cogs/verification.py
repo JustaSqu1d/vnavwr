@@ -1,10 +1,11 @@
-from discord import message_command, Color, Embed
-from discord.ext.commands import Cog
-from constants import bot, placesPC, places_mobile, DenialReason
-from time import time
 from datetime import datetime
+from time import time
+
 from bson import encode
 from bson.raw_bson import RawBSONDocument
+from constants import DenialReason, bot, places_mobile, placesPC
+from discord import Color, Embed, message_command
+from discord.ext.commands import Cog
 
 
 class Verification(Cog):

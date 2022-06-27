@@ -1,9 +1,11 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-from constants import Ships, modes, categories, places, bot
-from threading import Thread
 from os import system
+from threading import Thread
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+from constants import Ships, bot, categories, modes, places
 
 
 def api_run():
