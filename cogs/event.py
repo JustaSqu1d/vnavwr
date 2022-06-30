@@ -40,11 +40,6 @@ class Event(Cog):
                 return
             await msg.delete()
 
-    @commands.Cog.listener()
-    async def on_interaction(self, interaction):
-        print(f"[INIT] {interaction.user} issued a {interaction.type}")
-        await self.bot.process_application_commands(interaction)
-
 
 def setup(bot):
     bot.add_cog(Event(bot))

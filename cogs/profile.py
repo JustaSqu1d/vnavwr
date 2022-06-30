@@ -52,38 +52,39 @@ class Profile(Cog):
         for entry in entries:
             personal_bests[entry] = all_entries[entry]
 
+        print(personal_bests)
         for score in personal_bests:
 
             ship, mode, link, score1 = (
-                score["ship"],
-                score["gamemode"],
-                score["link"],
-                int(score["score"]),
+                personal_bests[score]["ship"],
+                personal_bests[score]["mode"],
+                personal_bests[score]["link"],
+                int(personal_bests[score]["score"]),
             )
-            if score["hours"] == 0:
+            if personal_bests[score]["hour"] == 0:
 
                 sec = (
-                    f'0{score["seconds"]}'
-                    if len(str(score["seconds"])) == 1
-                    else f'{score["seconds"]}'
+                    f'0{personal_bests[score]["second"]}'
+                    if len(str(personal_bests[score]["second"])) == 1
+                    else f'{personal_bests[score]["second"]}'
                 )
 
-                time = f"{score['minutes']}:{sec}"
+                time = f"{personal_bests[score]['minute']}:{sec}"
             else:
 
                 sec = (
-                    f'0{score["seconds"]}'
-                    if len(str(score["seconds"])) == 1
-                    else f'{score["seconds"]}'
+                    f'0{personal_bests[score]["second"]}'
+                    if len(str(personal_bests[score]["second"])) == 1
+                    else f'{personal_bests[score]["second"]}'
                 )
 
                 min = (
-                    f'0{score["minutes"]}'
-                    if len(str(score["minutes"])) == 1
-                    else f'{score["minutes"]}'
+                    f'0{personal_bests[score]["minute"]}'
+                    if len(str(personal_bests[score]["minute"])) == 1
+                    else f'{personal_bests[score]["minute"]}'
                 )
 
-                time = f"{score['hours']}:{min}:{sec}"
+                time = f"{personal_bests[score]['hour']}:{min}:{sec}"
 
             if not (f"[{ship} {time} ({mode})]" in temp):
 
