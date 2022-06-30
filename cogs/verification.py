@@ -33,7 +33,7 @@ class Verification(Cog):
 
         submissions = bot.db.find_one({"_id": "submissions"})
 
-        if msg.id not in submissions:
+        if str(msg.id) not in submissions:
             await ctx.followup.send("No submission found.")
             end_time = time()
             print(
@@ -41,7 +41,7 @@ class Verification(Cog):
             )
             return
 
-        submission = submissions[msg.id]
+        submission = submissions[str(msg.id)]
         author_id = submission["author_id"]
 
         ship, seconds, minutes, hours, evidence, score, platform, gamemode = (
@@ -70,14 +70,16 @@ class Verification(Cog):
             }
         }
 
-        if str(author_id) not in bot.db.find_one({"_id": "personal best"}):
-            bot.db.update_one(
-                {"_id": "personal best"},
-                {"$set": RawBSONDocument(encode({str(author_id): []}))},
-            )
-
-        pbs = bot.db.find_one({"_id": "personal best"})
-        pbs[str(author_id)].append(arry)
+        bot.db.update_one(
+            {"_id": "personal best"},
+            {
+                "$set": RawBSONDocument(
+                    encode(
+                        {f"{author_id} | {score} {ship} {gamemode}": arry[author_id]}
+                    )
+                )
+            },
+        )
 
         categories = ["High Score"]
 
@@ -426,11 +428,14 @@ class Verification(Cog):
         embed.color = Color.green()
         embed.timestamp = datetime.now()
         embed.set_footer(text="Approved at")
-        id = 929206223037952050
-        ping = ctx.guild.get_role(id)
+
+        role_id = 929206223037952050
+        ping = ctx.guild.get_role(role_id)
+
         await ctx.followup.send("Approved!")
         await ctx.send(f"{ping.mention} New World Record Approved!")
         await msg.edit(embed=embed)
+
         embed2 = Embed(
             title="Your submission has been approved!",
             url=msg.jump_url,

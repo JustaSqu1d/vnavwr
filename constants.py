@@ -131,6 +131,7 @@ shipsall = [
     ships9,
     ships10,
 ]
+
 modes = ["FFA", "2 Teams"]
 
 categories = ["Fast 500k", "Fast 1m", "Fast 1.5m", "High Score"]
@@ -210,7 +211,7 @@ class DenialReason(Modal):
 
         submissions = bot.db.find_one({"_id": "submissions"})
 
-        if msg.id not in submissions:
+        if str(msg.id) not in submissions:
             await ctx.followup.send("No submission found.")
             end_time = time()
             print(

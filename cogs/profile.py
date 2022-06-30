@@ -31,7 +31,7 @@ class Profile(Cog):
         entries = []
 
         for key in all_entries.keys():
-            if member.id in key:
+            if str(member.id) in key:
                 entries.append(key)
 
         if entries == []:

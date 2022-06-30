@@ -32,12 +32,12 @@ app.add_middleware(
 
 
 @app.get("/", status_code=203)
-def home():
+async def home():
     return
 
 
 @app.post("/api")
-def api(body: Body):
+async def api(body: Body):
     if body.ship not in Ships:
         return {"error": "Invalid ship.", "Valid ships": " | ".join(Ships)}
     if body.mode not in modes:
