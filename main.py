@@ -1,4 +1,4 @@
-from os import environ  # , getenv
+from os import environ
 from random import choice
 
 from discord import Activity, ActivityType

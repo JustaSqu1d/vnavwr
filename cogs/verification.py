@@ -4,8 +4,7 @@ from time import time
 from bson import encode
 from bson.raw_bson import RawBSONDocument
 from constants import DenialReason, bot, places_mobile, placesPC
-from discord import Color, Embed, message_command
-from discord.ext.commands import Cog
+from discord import Color, Embed, message_command, Cog
 
 
 class Verification(Cog):
@@ -138,7 +137,9 @@ class Verification(Cog):
                                 + (db[ship][gamemode][category][place]["hour"] * 3600)
                             )
                             if IGtimesec < time_:
-                                author_score = db[ship][gamemode][category][place]["user"]
+                                author_score = db[ship][gamemode][category][place][
+                                    "user"
+                                ]
                                 author_id2 = author_score.split("|")[0]
                                 score2 = author_score.split("|")[1]
 
@@ -160,7 +161,9 @@ class Verification(Cog):
                                         }
                                     }
                                 )
-                                IGtimesec = (seconds2) + (minutes2 * 60) + (hours2 * 3600)
+                                IGtimesec = (
+                                    (seconds2) + (minutes2 * 60) + (hours2 * 3600)
+                                )
 
                                 bot.db.update_one(
                                     {"Name": "WR"},
@@ -170,7 +173,9 @@ class Verification(Cog):
                                                 encode(
                                                     {
                                                         "user": f'{arry[author]["author_id"]}|{arry[author]["score"]}',
-                                                        "link": arry[author]["evidence"],
+                                                        "link": arry[author][
+                                                            "evidence"
+                                                        ],
                                                         "hour": arry[author]["hours"],
                                                         "min": arry[author]["minutes"],
                                                         "sec": arry[author]["seconds"],
@@ -187,7 +192,9 @@ class Verification(Cog):
                             author_score = db[ship][gamemode][category][place]["user"]
                             score2 = int(author_score.split("|")[1])
                             if score > score2:
-                                author_score = db[ship][gamemode][category][place]["user"]
+                                author_score = db[ship][gamemode][category][place][
+                                    "user"
+                                ]
                                 author_id2 = author_score.split("|")[0]
                                 score2 = author_score.split("|")[1]
 
@@ -218,7 +225,9 @@ class Verification(Cog):
                                                 encode(
                                                     {
                                                         "user": f'{arry[author]["author_id"]}|{arry[author]["score"]}',
-                                                        "link": arry[author]["evidence"],
+                                                        "link": arry[author][
+                                                            "evidence"
+                                                        ],
                                                         "hour": arry[author]["hours"],
                                                         "min": arry[author]["minutes"],
                                                         "sec": arry[author]["seconds"],

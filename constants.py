@@ -7,7 +7,6 @@ from bson.raw_bson import RawBSONDocument
 from discord import Bot, ButtonStyle, Color, Embed, InputTextStyle, Intents, ui
 from discord.ui import InputText, Modal
 from pymongo import MongoClient
-from math import floor, log
 
 bot = Bot(intents=Intents.all())
 
@@ -374,6 +373,7 @@ class SubmissionForm(Modal):
 
 
 def re_format(number):
+    from math import floor, log
     units = ["", "k", "m", "g", "t", "p"]
     k = 1000.0
     magnitude = int(floor(log(number, k)))

@@ -1,7 +1,7 @@
 from constants import Ships, SubmissionForm
-from discord.commands import Option, slash_command
-from discord.ext.commands import Cog
+from discord.commands import Option
 from discord.utils import basic_autocomplete
+from discord import slash_command, Cog
 
 
 class Submit(Cog):

@@ -1,9 +1,7 @@
 import time
-
 import discord
 from constants import bot, re_format
-from discord.commands import user_command
-from discord.ext.commands import Cog
+from discord import Cog, user_command
 
 
 class Profile(Cog):

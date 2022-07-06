@@ -2,8 +2,7 @@ from asyncio import gather
 from time import time
 
 from constants import Ships, bot, places, shipsall, re_format
-from discord import ButtonStyle, Embed, Option, SlashCommandGroup
-from discord.ext.commands import Cog
+from discord import ButtonStyle, Embed, Option, SlashCommandGroup, Cog
 from discord.ext.pages import Page, Paginator
 from discord.ui import Button, View
 from discord.utils import basic_autocomplete
