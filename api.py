@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Literal
 
-from constants import Ships, bot, categories, modes, places
+from constants import bot
 
 
 def api_run():
