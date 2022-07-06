@@ -4,6 +4,7 @@ from threading import Thread
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from typing import Literal
 
 from constants import Ships, bot, categories, modes, places
 
@@ -14,17 +15,99 @@ def api_run():
 
 
 class Body(BaseModel):
-    ship: str
-    mode: str
-    category: str
-    place: str
+    ship: Literal[
+        "Alien Blaster",
+        "Annihilator",
+        "Artillery",
+        "Eagle",
+        "Astronaut",
+        "Auto 4",
+        "Auto 5",
+        "Barricade",
+        "Basic",
+        "Bat",
+        "Bomber",
+        "Boomerang",
+        "Boomertwin",
+        "Booster",
+        "Boosterflip",
+        "Builder",
+        "Bushwacker",
+        "Carrier",
+        "Conqueror",
+        "Cruiser",
+        "Demolisher",
+        "Drone Addict",
+        "Drone Trapper",
+        "Dual",
+        "Factory",
+        "Fighter",
+        "Flank Guard",
+        "Fortress",
+        "Galaxian",
+        "Gunner",
+        "Gunner Trapper",
+        "Hulk",
+        "Hunter",
+        "Hybrid",
+        "Machine Gun",
+        "Mega 3",
+        "Necromancer",
+        "Octo Ship",
+        "Falcon",
+        "Overboomerang",
+        "Overgunner",
+        "Overlord",
+        "Polyballs",
+        "Power Glider",
+        "Predator",
+        "Quad Ship",
+        "Quad-builder",
+        "Quadlet",
+        "Quintlet",
+        "Ranger",
+        "Savage",
+        "Skimmer",
+        "Sniper",
+        "Space Jet",
+        "Spike",
+        "Sprayer",
+        "Sputnik",
+        "Stradblock",
+        "Streamliner",
+        "Surfer",
+        "Trappershot",
+        "Trappetytrap",
+        "Triple Twin",
+        "Triplet",
+        "Twin Flank",
+        "Twin Laser",
+        "UFO",
+    ]
+    mode: Literal["FFA", "2 Teams"]
+    category: Literal["Fast 500k", "Fast 1m", "Fast 1.5m", "High Score"]
+    place: Literal[
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "Mobile 1st",
+        "Mobile 2nd",
+        "Mobile 3rd",
+    ]
 
 
 app = FastAPI(title="Vnav.io World Records API", version="1.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://vnav.io"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -38,17 +121,6 @@ async def home():
 
 @app.post("/api")
 async def api(body: Body):
-    if body.ship not in Ships:
-        return {"error": "Invalid ship.", "Valid ships": " | ".join(Ships)}
-    if body.mode not in modes:
-        return {"error": "Invalid gamemode.", "Valid gamemodes": " | ".join(modes)}
-    if body.category not in categories:
-        return {
-            "error": "Invalid category.",
-            "Valid categories": " | ".join(categories),
-        }
-    if body.place not in places:
-        return {"error": "Invalid place.", "Valid places": " | ".join(places)}
     db = bot.db.find_one({"Name": "WR"})
     try:
         dict = {
