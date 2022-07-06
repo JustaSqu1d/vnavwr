@@ -1,10 +1,9 @@
 import time
 
 import discord
-from constants import bot
+from constants import bot, re_format
 from discord.commands import user_command
 from discord.ext.commands import Cog
-from rounding import re_format
 
 
 class Profile(Cog):

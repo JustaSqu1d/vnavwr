@@ -5,8 +5,7 @@ from discord import Activity, ActivityType
 from discord.ext import tasks
 
 from api import api_run
-from constants import Ships, bot, modes
-from rounding import re_format
+from constants import Ships, bot, modes, re_format
 
 bot.activity = Activity(name="Vnav.io World Records", type=ActivityType.competing)
 

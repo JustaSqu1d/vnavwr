@@ -7,6 +7,7 @@ from bson.raw_bson import RawBSONDocument
 from discord import Bot, ButtonStyle, Color, Embed, InputTextStyle, Intents, ui
 from discord.ui import InputText, Modal
 from pymongo import MongoClient
+from math import floor, log
 
 bot = Bot(intents=Intents.all())
 
@@ -219,7 +220,7 @@ class DenialReason(Modal):
             )
             return
 
-        author = await bot.fetch_user(author)
+        author = await bot.fetch_user(submissions[msg.id]["author_id"])
         # denied can be re-approved
 
         try:
@@ -370,3 +371,10 @@ class SubmissionForm(Modal):
         print(
             f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. Runtime: {round(end_time - start_time)} seconds"
         )
+
+
+def re_format(number):
+    units = ["", "k", "m", "g", "t", "p"]
+    k = 1000.0
+    magnitude = int(floor(log(number, k)))
+    return "%.2f%s" % (number / k**magnitude, units[magnitude])
