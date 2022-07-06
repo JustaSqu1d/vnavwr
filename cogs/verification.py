@@ -13,7 +13,7 @@ class Verification(Cog):
         super().__init__()
 
     @message_command(name="deny", guild_ids=[588921569271611393])
-    async def deny(ctx, msg):
+    async def deny(self, ctx, msg):
         if ctx.channel.id != 915211422475108393:
             return
 
