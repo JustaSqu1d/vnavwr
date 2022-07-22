@@ -134,7 +134,7 @@ shipsall = [
 
 modes = ["FFA", "2 Teams"]
 
-categories = ["Fast 500k", "Fast 1m", "Fast 1.5m", "High Score"]
+categories = ["Fast 500k", "Fast 1m", "Fast 1,5m", "High Score"]
 
 ShipLower = [ship.lower() for ship in Ships]
 
@@ -374,6 +374,7 @@ class SubmissionForm(Modal):
 
 def re_format(number):
     from math import floor, log
+
     units = ["", "k", "m", "g", "t", "p"]
     k = 1000.0
     magnitude = int(floor(log(number, k)))

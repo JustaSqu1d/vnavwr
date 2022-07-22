@@ -85,7 +85,7 @@ class Body(BaseModel):
         "UFO",
     ]
     mode: Literal["FFA", "2 Teams"]
-    category: Literal["Fast 500k", "Fast 1m", "Fast 1.5m", "High Score"]
+    category: Literal["Fast 500k", "Fast 1m", "Fast 1,5m", "High Score"]
     place: Literal[
         "1",
         "2",

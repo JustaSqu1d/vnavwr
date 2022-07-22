@@ -109,7 +109,7 @@ class Wrall(Cog):
         category: Option(
             str,
             "Choose a category!",
-            choices=["High Score", "Fast 500k", "Fast 1m", "Fast 1.5m"],
+            choices=["High Score", "Fast 500k", "Fast 1m", "Fast 1,5m"],
             required=True,
         ),
     ):
