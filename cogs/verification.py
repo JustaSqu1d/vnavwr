@@ -94,7 +94,7 @@ class Verification(Cog):
         if score >= 1000000:
             categories.append("Fast 1m")
         if score >= 1500000:
-            categories.append("Fast 1.5m")
+            categories.append("Fast 1,5m")
 
         db = bot.db.find_one({"Name": "WR"})
 
