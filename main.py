@@ -41,6 +41,7 @@ async def congrats():
 @bot.event
 async def on_ready():
     print("Online!")
+    print(bot.db.find_one({"Name": "WR"}))
     congrats.start()
 
 
