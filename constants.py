@@ -264,7 +264,7 @@ class SubmissionForm(Modal):
             minutes = int(self.value[3].value)
             seconds = int(self.value[4].value)
         except:
-            await interaction.response.send_message("Invalid input!")
+            pass
 
         ctx = self.ctx
         ship = self.ship
