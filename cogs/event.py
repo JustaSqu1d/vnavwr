@@ -1,11 +1,12 @@
 from discord.ext import commands
 from discord import Cog
 
+
 class Event(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener()
+    @Cog.listener()
     async def on_message_edit(self, msg1, msg):
         if "://" in msg.content.lower() and (
             "discord" in msg.content.lower()
@@ -22,7 +23,7 @@ class Event(Cog):
                 return
             await msg.delete()
 
-    @commands.Cog.listener()
+    @Cog.listener()
     async def on_message(self, msg):
         if "://" in msg.content.lower() and (
             "discord" in msg.content.lower()
