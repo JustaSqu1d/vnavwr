@@ -10,6 +10,7 @@ from discord import Color, Embed, message_command, Cog
 class Verification(Cog):
     def __init__(self, bot):
         super().__init__()
+        self.bot = bot
 
     @message_command(name="deny", guild_ids=[588921569271611393])
     async def deny(self, ctx, msg):
