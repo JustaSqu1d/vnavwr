@@ -10,8 +10,8 @@ from constants import bot
 
 
 def api_run():
-    api = Thread(target=system, args=("uvicorn api:app --host 0.0.0.0 --port 8080",))
-    api.start()
+    client = Thread(target=system, args=("uvicorn api:app --host 0.0.0.0 --port 8080",))
+    client.start()
 
 
 class Body(BaseModel):
@@ -123,7 +123,7 @@ async def home():
 async def api(body: Body):
     db = bot.db.find_one({"Name": "WR"})
     try:
-        dict = {
+        result = {
             "user_id": db[body.ship][body.mode][body.category][body.place][
                 "user"
             ].split("|")[0],
@@ -136,7 +136,7 @@ async def api(body: Body):
             "seconds": db[body.ship][body.mode][body.category][body.place]["sec"],
         }
     except:
-        dict = {
+        result = {
             "user_id": 0,
             "score": 0,
             "link": 0,
@@ -144,4 +144,4 @@ async def api(body: Body):
             "minutes": 0,
             "seconds": 0,
         }
-    return dict
+    return result
