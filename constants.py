@@ -215,7 +215,8 @@ class DenialReason(Modal):
             await ctx.followup.send("No submission found.")
             end_time = time()
             print(
-                f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. Runtime: {round(end_time - start_time)} seconds"
+                f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. "
+                f"Runtime: {round(end_time - start_time)} seconds "
             )
             return
 
@@ -230,7 +231,8 @@ class DenialReason(Modal):
         await interaction.response.send_message("Denied...", ephemeral=True)
         end_time = time()
         print(
-            f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. Runtime: {round(end_time - start_time)} seconds"
+            f"[CLOSE] {ctx.interaction.user} completed {ctx.command.name}. "
+            f"Runtime: {round(end_time - start_time)} seconds "
         )
 
         return
@@ -291,7 +293,7 @@ class SubmissionForm(Modal):
             return
 
         if (
-            (hours * 3600) + (minutes * 60) + (seconds) <= 10
+            (hours * 3600) + (minutes * 60) + seconds <= 10
             or minutes > 60
             or seconds > 60
             or hours > 72
@@ -314,19 +316,19 @@ class SubmissionForm(Modal):
             embed=confirm, view=button, ephemeral=True
         )
 
-        ButtonTimeoutBool = await button.wait()
+        button_timeout_bool = await button.wait()
         for child in button.children:
             child.disabled = True
-        TimedOut = Embed(title="Session Timed-Out. Try again.", color=Color.red())
-        Submit = Embed(
+        timed_out = Embed(title="Session Timed-Out. Try again.", color=Color.red())
+        submit = Embed(
             title="Your submission has been submitted. Awaiting approval...",
             color=Color.green(),
         )
-        if ButtonTimeoutBool:
-            await interaction.edit_original_message(embed=TimedOut, view=button)
+        if button_timeout_bool:
+            await interaction.edit_original_message(embed=timed_out, view=button)
             return
 
-        await interaction.edit_original_message(embed=Submit, view=button)
+        await interaction.edit_original_message(embed=submit, view=button)
 
         embed = Embed(
             title=f"{ship} ({gamemode}) ({platform})",
