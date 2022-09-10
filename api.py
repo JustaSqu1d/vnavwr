@@ -103,7 +103,7 @@ class Body(BaseModel):
     ]
 
 
-app = FastAPI(title="Vnav.io World Records API", version="1.1.0")
+app = FastAPI(title="Vnav.io World Records API", version="1.1.1")
 
 app.add_middleware(
     CORSMiddleware,
@@ -123,17 +123,18 @@ async def home():
 async def api(body: Body):
     db = bot.db.find_one({"Name": "WR"})
     try:
+        data = data
         result = {
-            "user_id": db[body.ship][body.mode][body.category][body.place][
+            "user_id": data[
                 "user"
             ].split("|")[0],
-            "score": db[body.ship][body.mode][body.category][body.place]["user"].split(
+            "score": data["user"].split(
                 "|"
             )[1],
-            "link": db[body.ship][body.mode][body.category][body.place]["link"],
-            "hours": db[body.ship][body.mode][body.category][body.place]["hour"],
-            "minutes": db[body.ship][body.mode][body.category][body.place]["min"],
-            "seconds": db[body.ship][body.mode][body.category][body.place]["sec"],
+            "link": data["link"],
+            "hours": data["hour"],
+            "minutes": data["min"],
+            "seconds": data["sec"],
         }
     except:
         result = {
