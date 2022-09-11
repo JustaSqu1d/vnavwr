@@ -123,14 +123,10 @@ async def home():
 async def api(body: Body):
     db = bot.db.find_one({"Name": "WR"})
     try:
-        data = data
+        data = db[body.ship][body.mode][body.category][body.place]
         result = {
-            "user_id": data[
-                "user"
-            ].split("|")[0],
-            "score": data["user"].split(
-                "|"
-            )[1],
+            "user_id": data["user"].split("|")[0],
+            "score": data["user"].split("|")[1],
             "link": data["link"],
             "hours": data["hour"],
             "minutes": data["min"],
